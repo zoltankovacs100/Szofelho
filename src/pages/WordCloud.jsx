@@ -1,19 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { db } from '../firebase';
-import { collection, addDoc, onSnapshot, query, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, onSnapshot, query, serverTimestamp, doc } from 'firebase/firestore';
 import cloud from 'd3-cloud';
 
 const colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'];
 
 const WordCloud = () => {
   const { sessionId } = useParams();
+  const [sessionTopic, setSessionTopic] = useState('');
   const [words, setWords] = useState([]);
   const [layoutWords, setLayoutWords] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
+  const containerRef = useRef(null);
 
-  // Fetch words in real-time
+
+  // Fetch session topic
+  useEffect(() => {
+    if (!sessionId) return;
+    const sessionDocRef = doc(db, 'sessions', sessionId);
+    const unsubscribe = onSnapshot(sessionDocRef, (doc) => {
+        if (doc.exists()) {
+            setSessionTopic(doc.data().topic);
+        } else {
+            setError("A munkamenet nem található.");
+        }
+    });
+    return () => unsubscribe();
+  }, [sessionId]);
+
+  // Fetch words for the session in real-time
   useEffect(() => {
     if (!sessionId) return;
     const wordsRef = collection(db, 'sessions', sessionId, 'words');
@@ -42,20 +59,22 @@ const WordCloud = () => {
 
   // Generate layout with d3-cloud
   useEffect(() => {
-    if (words.length === 0) {
+    if (words.length === 0 || !containerRef.current) {
       setLayoutWords([]);
       return;
     };
+    
+    const containerWidth = containerRef.current.offsetWidth;
+    const containerHeight = containerRef.current.offsetHeight;
 
     const layout = cloud()
-      .size([500, 400]) // Fixed size for the cloud container
+      .size([containerWidth, containerHeight])
       .words(words.map(d => ({ ...d })))
       .padding(5)
       .rotate(() => (Math.random() > 0.5 ? 90 : 0))
       .font('Impact')
       .fontSize(d => d.value)
       .on('end', (words) => {
-          // Add color to each word
           const coloredWords = words.map(word => ({
               ...word,
               color: colors[Math.floor(Math.random() * colors.length)]
@@ -92,6 +111,8 @@ const WordCloud = () => {
   return (
     <div className="card">
       <h1>Szófelhő</h1>
+      {sessionTopic && <h2 style={{color: '#333'}}>{sessionTopic}</h2>}
+      
       <p>Írj be szavakat, és nézd, ahogy megjelennek a felhőben!</p>
       <form onSubmit={handleWordSubmit}>
         <input
@@ -104,12 +125,12 @@ const WordCloud = () => {
       </form>
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      <div className="wordcloud-container">
+      <div className="wordcloud-container" ref={containerRef}>
          <svg
-            width={500}
-            height={400}
+            width={containerRef.current ? containerRef.current.offsetWidth : 0}
+            height={containerRef.current ? containerRef.current.offsetHeight : 0}
         >
-            <g transform={`translate(250, 200)`}>
+            <g transform={`translate(${containerRef.current ? containerRef.current.offsetWidth / 2 : 0}, ${containerRef.current ? containerRef.current.offsetHeight / 2 : 0})`}>
                 {layoutWords.map((word, i) => (
                     <text
                         key={i}
@@ -118,7 +139,7 @@ const WordCloud = () => {
                         style={{ 
                             fontSize: word.size, 
                             fontFamily: 'Impact',
-                            fill: word.color, // Use the assigned color
+                            fill: word.color,
                         }}
                     >
                         {word.text}

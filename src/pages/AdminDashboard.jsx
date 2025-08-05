@@ -7,6 +7,7 @@ import { collection, addDoc, onSnapshot, query, orderBy } from "firebase/firesto
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [sessions, setSessions] = useState([]);
+  const [newTopic, setNewTopic] = useState('');
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -24,15 +25,22 @@ const AdminDashboard = () => {
     return () => unsubscribe();
   }, []);
 
-  const createSession = async () => {
+  const createSession = async (e) => {
+    e.preventDefault();
+    if (!newTopic.trim()) {
+        setError("A téma nem lehet üres.");
+        return;
+    }
     setError(null);
     try {
       const pin = Math.floor(100000 + Math.random() * 900000).toString();
       await addDoc(collection(db, "sessions"), {
         pin: pin,
+        topic: newTopic, // A téma mentése
         createdAt: new Date(),
         status: 'active'
       });
+      setNewTopic(''); // Ürítjük a mezőt sikeres létrehozás után
     } catch (e) {
       console.error("Hiba az új munkamenet létrehozásakor: ", e);
       setError("Nem sikerült új munkamenetet létrehozni.");
@@ -51,10 +59,19 @@ const AdminDashboard = () => {
   return (
     <div className="card">
       <h2>Admin Felület</h2>
-      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '1.5rem' }}>
-        <button type="button" onClick={createSession}>Új munkamenet</button>
-        <button className="logout" onClick={handleLogout}>Kijelentkezés</button>
-      </div>
+      <button className="logout" style={{float: 'right'}} onClick={handleLogout}>Kijelentkezés</button>
+      
+      <h3>Új munkamenet</h3>
+      <form onSubmit={createSession}>
+          <input 
+            type="text"
+            value={newTopic}
+            onChange={(e) => setNewTopic(e.target.value)}
+            placeholder="Téma vagy kérdés a szófelhőhöz"
+            required
+          />
+          <button type="submit">Új munkamenet létrehozása PIN-kóddal</button>
+      </form>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
@@ -63,7 +80,10 @@ const AdminDashboard = () => {
         <ul>
           {sessions.map(session => (
             <li key={session.id}>
-                <span>Létrehozva: {new Date(session.createdAt.seconds * 1000).toLocaleString()}</span>
+                <span>
+                    <strong>Téma:</strong> {session.topic}<br/>
+                    <small>Létrehozva: {new Date(session.createdAt.seconds * 1000).toLocaleString()}</small>
+                </span>
                 <strong>{session.pin}</strong>
             </li>
           ))}
