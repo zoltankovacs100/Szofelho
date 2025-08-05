@@ -4,10 +4,10 @@ export const stylePresets = {
   'style-1': {
     id: 'style-1',
     name: 'Mélytenger',
-    background: '#0b0c29', // Javítva 'p'-ről 'b'-re
+    background: '#1a2a6c', // Világosabb, mély kék árnyalat
     wordColors: ['#3498db', '#f1c40f', '#e74c3c', '#9b59b6', '#ecf0f1'],
     textColor: '#FFFFFF',
-    cardColor: 'rgba(0, 0, 0, 0.25)'
+    cardColor: 'rgba(255, 255, 255, 0.1)' // Világosabb, kékesebb áttetsző réteg
   },
   'style-2': {
     id: 'style-2',

@@ -97,6 +97,7 @@ const WordCloud = () => {
       });
       setInputValue('');
     } catch (err) {
+      console.error(err);
       setError('Hiba történt a szó beküldésekor.');
     }
   };
@@ -125,8 +126,7 @@ const WordCloud = () => {
         className="transparent-card" 
         style={{ 
             backgroundColor: activeStyle.cardColor,
-            // Javított box-shadow: nincs 'spread', csak 'blur' a fényudvarhoz
-            boxShadow: `0 0 40px ${activeStyle.background}`
+            boxShadow: `0 0 60px ${activeStyle.background}` // Fényudvar 60px-re állítva
         }}
     >
       {sessionData?.topic && <h2 style={{ color: activeStyle.textColor, textShadow }}>{sessionData.topic}</h2>}
