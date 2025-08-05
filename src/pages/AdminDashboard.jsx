@@ -9,6 +9,7 @@ const AdminDashboard = () => {
   const [sessions, setSessions] = useState([]);
   const [newTopic, setNewTopic] = useState('');
   const [error, setError] = useState(null);
+  const [copiedSessionId, setCopiedSessionId] = useState(null);
 
   useEffect(() => {
     const q = query(collection(db, "sessions"), orderBy("createdAt", "desc"));
@@ -50,7 +51,6 @@ const AdminDashboard = () => {
   const deleteSession = async (sessionId) => {
     if (window.confirm("Valóban törölni akarod ezt a munkamenetet és az összes hozzá tartozó szót?")) {
         try {
-            // 1. Delete all words in the subcollection
             const wordsQuery = query(collection(db, `sessions/${sessionId}/words`));
             const wordsSnapshot = await getDocs(wordsQuery);
             const deletePromises = [];
@@ -59,7 +59,6 @@ const AdminDashboard = () => {
             });
             await Promise.all(deletePromises);
 
-            // 2. Delete the session document itself
             const sessionDocRef = doc(db, "sessions", sessionId);
             await deleteDoc(sessionDocRef);
             
@@ -68,6 +67,17 @@ const AdminDashboard = () => {
             setError("A munkamenet törlése sikertelen.");
         }
     }
+  };
+
+  const copyDirectLink = (sessionId) => {
+    const link = `${window.location.origin}/session/${sessionId}`;
+    navigator.clipboard.writeText(link).then(() => {
+        setCopiedSessionId(sessionId);
+        setTimeout(() => setCopiedSessionId(null), 2000); // Reset after 2 seconds
+    }).catch(err => {
+        console.error('Hiba a link másolásakor: ', err);
+        setError('A link másolása sikertelen.');
+    });
   };
 
   const handleLogout = async () => {
@@ -102,13 +112,18 @@ const AdminDashboard = () => {
       {sessions.length > 0 ? (
         <ul>
           {sessions.map(session => (
-            <li key={session.id} style={{alignItems: 'center'}}>
-                <button className="logout" style={{padding: '5px 10px', marginRight: '15px'}} onClick={() => deleteSession(session.id)}>Törlés</button>
-                <span>
+            <li key={session.id} style={{alignItems: 'center', flexWrap: 'wrap', gap: '10px'}}>
+                <button className="logout" style={{padding: '5px 10px'}} onClick={() => deleteSession(session.id)}>Törlés</button>
+                <div style={{flex: 1, minWidth: '200px'}}>
                     <strong>Téma:</strong> {session.topic}<br/>
                     <small>Létrehozva: {new Date(session.createdAt.seconds * 1000).toLocaleString()}</small>
-                </span>
-                <strong>{session.pin}</strong>
+                </div>
+                <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                    <strong>PIN: {session.pin}</strong>
+                    <button onClick={() => copyDirectLink(session.id)} style={{padding: '5px 10px', fontSize: '0.9rem'}}>
+                        {copiedSessionId === session.id ? 'Másolva!' : 'Link másolása'}
+                    </button>
+                </div>
             </li>
           ))}
         </ul>
