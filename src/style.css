@@ -35,6 +35,10 @@ body {
   border-radius: 12px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  
+  /* Új maszkolás a lágy szélekért */
+  -webkit-mask-image: radial-gradient(circle, black 80%, transparent 100%);
+  mask-image: radial-gradient(circle, black 80%, transparent 100%);
 }
 
 h2, h3 {
@@ -47,25 +51,7 @@ p {
   line-height: 1.6;
 }
 
-/* Alap űrlap elemek */
-input[type="email"],
-input[type="password"],
-input[type="text"] {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #dddfe2;
-  border-radius: 6px;
-  font-size: 1rem;
-  box-sizing: border-box;
-}
-
-input:focus {
-  border-color: #28a745;
-  outline: none;
-  box-shadow: 0 0 0 2px #e7f3ff;
-}
-
-/* Transzparens űrlap elemek */
+/* ... (többi stílus) ... */
 .transparent-card input[type="text"] {
   background-color: transparent;
   border: 2px solid rgba(255, 255, 255, 0.7);
@@ -88,7 +74,6 @@ input:focus {
   background-color: rgba(255, 255, 255, 0.4);
 }
 
-/* ALAP GOMB ZÖLD */
 button {
   background-color: #28a745;
   color: #ffffff;
@@ -104,14 +89,12 @@ button:hover {
   background-color: #218838;
 }
 
-/* Logout gomb piros */
 button.logout {
     background-color: #fa3e3e;
 }
 button.logout:hover {
     background-color: #e33030;
 }
-
 
 /* Szófelhő konténer */
 .wordcloud-container {

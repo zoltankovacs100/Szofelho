@@ -126,7 +126,7 @@ const WordCloud = () => {
         className="transparent-card" 
         style={{ 
             backgroundColor: activeStyle.cardColor,
-            boxShadow: `0 0 60px ${activeStyle.background}` // Fényudvar 60px-re állítva
+            // box-shadow eltávolítva
         }}
     >
       {sessionData?.topic && <h2 style={{ color: activeStyle.textColor, textShadow }}>{sessionData.topic}</h2>}
