@@ -110,7 +110,6 @@ const WordCloud = () => {
 
   return (
     <div className="card">
-      <h1>Szófelhő</h1>
       {sessionTopic && <h2 style={{color: '#333'}}>{sessionTopic}</h2>}
       
       <p>Írj be szavakat, és nézd, ahogy megjelennek a felhőben!</p>
