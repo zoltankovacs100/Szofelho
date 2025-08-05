@@ -1,0 +1,14 @@
+# Netlify build and redirect configuration
+# https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  # Build command
+  command = "npm run build"
+  # Directory to publish
+  publish = "dist"
+
+# Redirect rule for Single Page Applications (SPAs)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
