@@ -4,7 +4,7 @@ export const stylePresets = {
   'style-1': {
     id: 'style-1',
     name: 'Mélytenger',
-    background: '#0p0c29',
+    background: '#0b0c29', // Javítva 'p'-ről 'b'-re
     wordColors: ['#3498db', '#f1c40f', '#e74c3c', '#9b59b6', '#ecf0f1'],
     textColor: '#FFFFFF',
     cardColor: 'rgba(0, 0, 0, 0.25)'
@@ -28,9 +28,9 @@ export const stylePresets = {
   'style-4': {
     id: 'style-4',
     name: 'Pasztell álom',
-    background: '#006400', // Módosítva a kérésnek megfelelően
+    background: '#006400',
     wordColors: ['#f1c40f', '#2ecc71', '#ecf0f1', '#e74c3c', '#1abc9c'],
-    textColor: '#FFFFFF', // A sötét háttérhez a fehér szöveg jobban illik
+    textColor: '#FFFFFF',
     cardColor: 'rgba(0, 0, 0, 0.25)'
   },
   'style-5': {
