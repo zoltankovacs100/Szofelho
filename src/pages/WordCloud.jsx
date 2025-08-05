@@ -3,32 +3,41 @@ import { useParams } from 'react-router-dom';
 import { db } from '../firebase';
 import { collection, addDoc, onSnapshot, query, serverTimestamp, doc } from 'firebase/firestore';
 import cloud from 'd3-cloud';
-
-const colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'];
+import { stylePresets } from '../styles'; // Stílusok importálása
 
 const WordCloud = () => {
   const { sessionId } = useParams();
-  const [sessionTopic, setSessionTopic] = useState('');
+  const [sessionData, setSessionData] = useState({ topic: '', styleId: 'style-4' }); // Alapértelmezett stílus
   const [words, setWords] = useState([]);
   const [layoutWords, setLayoutWords] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
   const containerRef = useRef(null);
 
+  const activeStyle = stylePresets[sessionData.styleId] || stylePresets['style-4'];
 
-  // Fetch session topic
+  // Fetch session data (topic and styleId)
   useEffect(() => {
     if (!sessionId) return;
     const sessionDocRef = doc(db, 'sessions', sessionId);
     const unsubscribe = onSnapshot(sessionDocRef, (doc) => {
         if (doc.exists()) {
-            setSessionTopic(doc.data().topic);
+            setSessionData(doc.data());
         } else {
             setError("A munkamenet nem található.");
         }
     });
     return () => unsubscribe();
   }, [sessionId]);
+
+  // Apply background style dynamically
+  useEffect(() => {
+    document.body.style.backgroundColor = activeStyle.background;
+    // Cleanup function to reset background when component unmounts
+    return () => {
+        document.body.style.backgroundColor = '#f0f2f5'; // Visszaállítjuk az alapértelmezett háttérre
+    }
+  }, [activeStyle]);
 
   // Fetch words for the session in real-time
   useEffect(() => {
@@ -49,7 +58,7 @@ const WordCloud = () => {
 
       const formattedWords = Object.entries(wordCounts).map(([text, value]) => ({
         text,
-        value: value * 15, // Scale value for better visualization
+        value: value * 15,
       }));
       setWords(formattedWords);
     });
@@ -74,16 +83,16 @@ const WordCloud = () => {
       .rotate(() => (Math.random() > 0.5 ? 90 : 0))
       .font('Impact')
       .fontSize(d => d.value)
-      .on('end', (words) => {
-          const coloredWords = words.map(word => ({
+      .on('end', (generatedWords) => {
+          const coloredWords = generatedWords.map(word => ({
               ...word,
-              color: colors[Math.floor(Math.random() * colors.length)]
+              color: activeStyle.wordColors[Math.floor(Math.random() * activeStyle.wordColors.length)]
           }));
           setLayoutWords(coloredWords);
       });
 
     layout.start();
-  }, [words]);
+  }, [words, activeStyle]);
 
   const handleWordSubmit = async (e) => {
     e.preventDefault();
@@ -110,7 +119,7 @@ const WordCloud = () => {
 
   return (
     <div className="card">
-      {sessionTopic && <h2 style={{color: '#333'}}>{sessionTopic}</h2>}
+      {sessionData.topic && <h2 style={{color: '#333'}}>{sessionData.topic}</h2>}
       
       <p>Írj be szavakat, és nézd, ahogy megjelennek a felhőben!</p>
       <form onSubmit={handleWordSubmit}>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { signOut } from "firebase/auth";
 import { collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, getDocs } from "firebase/firestore";
+import StylePicker from '../components/StylePicker'; // Komponens importálása
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -39,7 +40,8 @@ const AdminDashboard = () => {
         pin: pin,
         topic: newTopic,
         createdAt: new Date(),
-        status: 'active'
+        status: 'active',
+        styleId: 'style-1' // Alapértelmezett stílus
       });
       setNewTopic('');
     } catch (e) {
@@ -112,18 +114,21 @@ const AdminDashboard = () => {
       {sessions.length > 0 ? (
         <ul>
           {sessions.map(session => (
-            <li key={session.id} style={{alignItems: 'center', flexWrap: 'wrap', gap: '10px'}}>
-                <button className="logout" style={{padding: '5px 10px'}} onClick={() => deleteSession(session.id)}>Törlés</button>
-                <div style={{flex: 1, minWidth: '200px'}}>
+            <li key={session.id} style={{alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px', flexDirection: 'column'}}>
+                <div style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
+                    <button className="logout" style={{padding: '5px 10px'}} onClick={() => deleteSession(session.id)}>Törlés</button>
+                    <div style={{textAlign: 'right'}}>
+                        <strong>PIN: {session.pin}</strong>
+                        <button onClick={() => copyDirectLink(session.id)} style={{padding: '5px 10px', fontSize: '0.9rem', marginLeft: '10px'}}>
+                            {copiedSessionId === session.id ? 'Másolva!' : 'Link másolása'}
+                        </button>
+                    </div>
+                </div>
+                <div style={{width: '100%', textAlign: 'left', marginTop: '10px'}}>
                     <strong>Téma:</strong> {session.topic}<br/>
                     <small>Létrehozva: {new Date(session.createdAt.seconds * 1000).toLocaleString()}</small>
                 </div>
-                <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-                    <strong>PIN: {session.pin}</strong>
-                    <button onClick={() => copyDirectLink(session.id)} style={{padding: '5px 10px', fontSize: '0.9rem'}}>
-                        {copiedSessionId === session.id ? 'Másolva!' : 'Link másolása'}
-                    </button>
-                </div>
+                <StylePicker sessionId={session.id} currentStyleId={session.styleId} />
             </li>
           ))}
         </ul>
