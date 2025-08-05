@@ -16,8 +16,7 @@ const WordCloud = () => {
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
-  const containerRef = useRef(null);
-  const wordCloudSvgRef = useRef(null);
+  const cloudContainerRef = useRef(null); // Ezt a ref-et fogjuk használni a PDF mentéshez
 
   const activeStyle = sessionData ? stylePresets[sessionData.styleId] || stylePresets['style-4'] : stylePresets['style-4'];
 
@@ -72,9 +71,9 @@ const WordCloud = () => {
 
   // Generate layout
   useEffect(() => {
-    if (words.length === 0 || !containerRef.current) return;
-    const containerWidth = containerRef.current.offsetWidth;
-    const containerHeight = containerRef.current.offsetHeight;
+    if (words.length === 0 || !cloudContainerRef.current) return;
+    const containerWidth = cloudContainerRef.current.offsetWidth;
+    const containerHeight = cloudContainerRef.current.offsetHeight;
     cloud()
       .size([containerWidth, containerHeight])
       .words(words.map(d => ({ ...d })))
@@ -108,8 +107,12 @@ const WordCloud = () => {
   };
 
   const saveAsPdf = () => {
-    if (!wordCloudSvgRef.current) return;
-    html2canvas(wordCloudSvgRef.current, { backgroundColor: null, useCORS: true }).then(canvas => {
+    if (!cloudContainerRef.current) return;
+    // A teljes konténert mentjük, nem csak az SVG-t
+    html2canvas(cloudContainerRef.current, { 
+        backgroundColor: activeStyle.background, // A háttérszínt is rárakjuk a képre
+        useCORS: true 
+    }).then(canvas => {
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({
         orientation: canvas.width > canvas.height ? 'landscape' : 'portrait',
@@ -124,7 +127,7 @@ const WordCloud = () => {
   const textShadow = '1px 1px 3px rgba(0,0,0,0.5)';
 
   return (
-    <div className="transparent-card" style={{ backgroundColor: activeStyle.cardColor }}>
+    <div className="transparent-card" style={{ backgroundColor: activeStyle.cardColor, border: 'none' }}>
       {sessionData?.topic && <h2 style={{ color: activeStyle.textColor, textShadow }}>{sessionData.topic}</h2>}
       <p style={{ color: activeStyle.textColor, textShadow }}>Írj be szavakat, és nézd, ahogy megjelennek a felhőben!</p>
       
@@ -134,9 +137,9 @@ const WordCloud = () => {
       </form>
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      <div className="wordcloud-container" ref={containerRef}>
-         <svg ref={wordCloudSvgRef} width={containerRef.current?.offsetWidth} height={containerRef.current?.offsetHeight}>
-            <g transform={`translate(${containerRef.current?.offsetWidth / 2}, ${containerRef.current?.offsetHeight / 2})`}>
+      <div className="wordcloud-container" ref={cloudContainerRef}>
+         <svg width={cloudContainerRef.current?.offsetWidth} height={cloudContainerRef.current?.offsetHeight}>
+            <g transform={`translate(${cloudContainerRef.current?.offsetWidth / 2}, ${cloudContainerRef.current?.offsetHeight / 2})`}>
                 {layoutWords.map((word, i) => (
                     <text key={i} textAnchor="middle" transform={`translate(${word.x}, ${word.y}) rotate(${word.rotate})`}
                         style={{ fontSize: word.size, fontFamily: 'Impact', fill: word.color, }}>

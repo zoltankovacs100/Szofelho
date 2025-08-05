@@ -14,7 +14,7 @@ body {
 
 #app {
   width: 100%;
-  max-width: 800px; /* Nagyobb maximális szélesség a jobb laptop nézethez */
+  max-width: 800px;
 }
 
 /* Alap kártya stílus (Admin oldal) */
@@ -30,17 +30,17 @@ body {
 
 /* Transzparens kártya stílus (Vendég oldal) */
 .transparent-card {
-  background-color: rgba(255, 255, 255, 0.2); /* Alapértelmezett, felülírjuk JS-ből */
+  background-color: rgba(0, 0, 0, 0.2); /* Alapértelmezett, felülírjuk JS-ből */
   padding: 1.5rem;
   border-radius: 12px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  /* border: 1px solid rgba(255, 255, 255, 0.18); <- KERET ELTÁVOLÍTVA */
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 h1, h2, h3 {
-  color: #1877f2;
+  color: #28a745; /* Kék helyett zöld */
   margin-top: 0;
   margin-bottom: 1.5rem;
 }
@@ -62,7 +62,7 @@ input[type="text"] {
 }
 
 input:focus {
-  border-color: #1877f2;
+  border-color: #28a745;
   outline: none;
   box-shadow: 0 0 0 2px #e7f3ff;
 }
@@ -91,8 +91,9 @@ input:focus {
 }
 
 
+/* ALAP GOMB MOST MÁR ZÖLD */
 button {
-  background-color: #1877f2;
+  background-color: #28a745; /* Sötétzöld */
   color: #ffffff;
   border: none;
   padding: 12px;
@@ -103,7 +104,7 @@ button {
 }
 
 button:hover {
-  background-color: #166fe5;
+  background-color: #218838; /* Sötétebb zöld hoverre */
 }
 
 /* ... (többi gomb stílus) ... */
@@ -111,7 +112,7 @@ button:hover {
 /* Szófelhő konténer */
 .wordcloud-container {
   width: 100%;
-  min-height: 300px; /* Alap magasság mobilon */
+  min-height: 300px;
   margin: 20px auto;
   border-radius: 8px;
   display: flex;
@@ -119,9 +120,8 @@ button:hover {
   align-items: center;
 }
 
-/* Nagyobb képernyőkre vonatkozó szabályok */
 @media (min-width: 768px) {
   .wordcloud-container {
-    min-height: 500px; /* Dupla magasság laptopon */
+    min-height: 500px;
   }
 }
