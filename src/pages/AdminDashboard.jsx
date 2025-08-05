@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { signOut } from "firebase/auth";
 import { collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, getDocs } from "firebase/firestore";
-import StylePicker from '../components/StylePicker'; // Komponens importálása
+import StylePicker from '../components/StylePicker';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ const AdminDashboard = () => {
         topic: newTopic,
         createdAt: new Date(),
         status: 'active',
-        styleId: 'style-1' // Alapértelmezett stílus
+        styleId: 'style-1'
       });
       setNewTopic('');
     } catch (e) {
@@ -49,9 +49,9 @@ const AdminDashboard = () => {
       setError("Nem sikerült új munkamenetet létrehozni.");
     }
   };
-
-  const deleteSession = async (sessionId) => {
-    if (window.confirm("Valóban törölni akarod ezt a munkamenetet és az összes hozzá tartozó szót?")) {
+  
+  const resetSessionWords = async (sessionId) => {
+    if (window.confirm("Valóban törölni akarod az összes szót ebből a munkamenetből? A munkamenet megmarad.")) {
         try {
             const wordsQuery = query(collection(db, `sessions/${sessionId}/words`));
             const wordsSnapshot = await getDocs(wordsQuery);
@@ -60,12 +60,21 @@ const AdminDashboard = () => {
                 deletePromises.push(deleteDoc(wordDoc.ref));
             });
             await Promise.all(deletePromises);
+        } catch (err) {
+            console.error("Hiba a szavak törlése során: ", err);
+            setError("A szavak törlése sikertelen.");
+        }
+    }
+  };
 
+  const deleteSession = async (sessionId) => {
+    if (window.confirm("Valóban törölni akarod ezt a munkamenetet és az összes hozzá tartozó szót?")) {
+        try {
+            await resetSessionWords(sessionId); // Először töröljük a szavakat
             const sessionDocRef = doc(db, "sessions", sessionId);
             await deleteDoc(sessionDocRef);
-            
         } catch (err) {
-            console.error("Hiba a törlés során: ", err);
+            console.error("Hiba a munkamenet törlése során: ", err);
             setError("A munkamenet törlése sikertelen.");
         }
     }
@@ -75,7 +84,7 @@ const AdminDashboard = () => {
     const link = `${window.location.origin}/session/${sessionId}`;
     navigator.clipboard.writeText(link).then(() => {
         setCopiedSessionId(sessionId);
-        setTimeout(() => setCopiedSessionId(null), 2000); // Reset after 2 seconds
+        setTimeout(() => setCopiedSessionId(null), 2000);
     }).catch(err => {
         console.error('Hiba a link másolásakor: ', err);
         setError('A link másolása sikertelen.');
@@ -116,7 +125,10 @@ const AdminDashboard = () => {
           {sessions.map(session => (
             <li key={session.id} style={{alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px', flexDirection: 'column'}}>
                 <div style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
-                    <button className="logout" style={{padding: '5px 10px'}} onClick={() => deleteSession(session.id)}>Törlés</button>
+                    <div>
+                        <button style={{padding: '5px 10px'}} onClick={() => resetSessionWords(session.id)}>Visszaállítás</button>
+                        <button className="logout" style={{padding: '5px 10px', marginLeft: '10px'}} onClick={() => deleteSession(session.id)}>Törlés</button>
+                    </div>
                     <div style={{textAlign: 'right'}}>
                         <strong>PIN: {session.pin}</strong>
                         <button onClick={() => copyDirectLink(session.id)} style={{padding: '5px 10px', fontSize: '0.9rem', marginLeft: '10px'}}>
