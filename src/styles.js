@@ -28,10 +28,10 @@ export const stylePresets = {
   'style-4': {
     id: 'style-4',
     name: 'Pasztell álom',
-    background: '#ecf0f1',
-    wordColors: ['#9b59b6', '#34495e', '#16a085', '#2980b9', '#e67e22'],
-    textColor: '#34495e',
-    cardColor: 'rgba(255, 255, 255, 0.5)'
+    background: '#006400', // Módosítva a kérésnek megfelelően
+    wordColors: ['#f1c40f', '#2ecc71', '#ecf0f1', '#e74c3c', '#1abc9c'],
+    textColor: '#FFFFFF', // A sötét háttérhez a fehér szöveg jobban illik
+    cardColor: 'rgba(0, 0, 0, 0.25)'
   },
   'style-5': {
     id: 'style-5',

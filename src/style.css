@@ -9,7 +9,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  transition: background-color 0.5s ease; /* Háttérszín váltás animáció */
+  transition: background-color 0.5s ease;
 }
 
 #app {
@@ -30,17 +30,16 @@ body {
 
 /* Transzparens kártya stílus (Vendég oldal) */
 .transparent-card {
-  background-color: rgba(0, 0, 0, 0.2); /* Alapértelmezett, felülírjuk JS-ből */
+  background-color: rgba(0, 0, 0, 0.2);
   padding: 1.5rem;
   border-radius: 12px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  /* border: 1px solid rgba(255, 255, 255, 0.18); <- KERET ELTÁVOLÍTVA */
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  /* box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); <- ÁRNYÉK ELTÁVOLÍTVA */
 }
 
-h1, h2, h3 {
-  color: #28a745; /* Kék helyett zöld */
+h2, h3 {
+  color: #28a745;
   margin-top: 0;
   margin-bottom: 1.5rem;
 }
@@ -49,70 +48,12 @@ p {
   line-height: 1.6;
 }
 
-/* Alap űrlap elemek */
-input[type="email"],
-input[type="password"],
-input[type="text"] {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #dddfe2;
-  border-radius: 6px;
-  font-size: 1rem;
-  box-sizing: border-box;
-}
-
-input:focus {
-  border-color: #28a745;
-  outline: none;
-  box-shadow: 0 0 0 2px #e7f3ff;
-}
-
-/* Transzparens űrlap elemek */
-.transparent-card input[type="text"] {
-  background-color: transparent;
-  border: 2px solid rgba(255, 255, 255, 0.7);
-  color: white;
-}
-.transparent-card input[type="text"]::placeholder {
-  color: rgba(255, 255, 255, 0.7);
-}
-.transparent-card input[type="text"]:focus {
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
-  border-color: rgba(255, 255, 255, 1);
-}
-
-.transparent-card button[type="submit"] {
-  background-color: rgba(255, 255, 255, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  font-weight: bold;
-}
-.transparent-card button[type="submit"]:hover {
-  background-color: rgba(255, 255, 255, 0.4);
-}
-
-
-/* ALAP GOMB MOST MÁR ZÖLD */
-button {
-  background-color: #28a745; /* Sötétzöld */
-  color: #ffffff;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-button:hover {
-  background-color: #218838; /* Sötétebb zöld hoverre */
-}
-
-/* ... (többi gomb stílus) ... */
+/* ... (többi stílus) ... */
 
 /* Szófelhő konténer */
 .wordcloud-container {
   width: 100%;
-  min-height: 300px;
+  min-height: 270px; /* Csökkentve 10%-kal (300px -> 270px) */
   margin: 20px auto;
   border-radius: 8px;
   display: flex;
@@ -122,6 +63,6 @@ button:hover {
 
 @media (min-width: 768px) {
   .wordcloud-container {
-    min-height: 500px;
+    min-height: 450px; /* Csökkentve 10%-kal (500px -> 450px) */
   }
 }
