@@ -16,11 +16,10 @@ const WordCloud = () => {
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
-  const cloudContainerRef = useRef(null); // Ezt a ref-et fogjuk használni a PDF mentéshez
+  const cloudContainerRef = useRef(null);
 
   const activeStyle = sessionData ? stylePresets[sessionData.styleId] || stylePresets['style-4'] : stylePresets['style-4'];
 
-  // Check if user is admin
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setIsAdmin(!!user);
@@ -28,7 +27,6 @@ const WordCloud = () => {
     return () => unsubscribe();
   }, []);
   
-  // Fetch session data
   useEffect(() => {
     if (!sessionId) return;
     const sessionDocRef = doc(db, 'sessions', sessionId);
@@ -42,7 +40,6 @@ const WordCloud = () => {
     return () => unsubscribe();
   }, [sessionId]);
 
-  // Apply background style dynamically
   useEffect(() => {
     document.body.style.backgroundColor = activeStyle.background;
     return () => {
@@ -50,7 +47,6 @@ const WordCloud = () => {
     }
   }, [activeStyle]);
 
-  // Fetch words
   useEffect(() => {
     if (!sessionId) return;
     const wordsRef = collection(db, 'sessions', sessionId, 'words');
@@ -69,7 +65,6 @@ const WordCloud = () => {
     return () => unsubscribe();
   }, [sessionId]);
 
-  // Generate layout
   useEffect(() => {
     if (words.length === 0 || !cloudContainerRef.current) return;
     const containerWidth = cloudContainerRef.current.offsetWidth;
@@ -108,9 +103,8 @@ const WordCloud = () => {
 
   const saveAsPdf = () => {
     if (!cloudContainerRef.current) return;
-    // A teljes konténert mentjük, nem csak az SVG-t
     html2canvas(cloudContainerRef.current, { 
-        backgroundColor: activeStyle.background, // A háttérszínt is rárakjuk a képre
+        backgroundColor: activeStyle.background,
         useCORS: true 
     }).then(canvas => {
       const imgData = canvas.toDataURL('image/png');
@@ -127,7 +121,13 @@ const WordCloud = () => {
   const textShadow = '1px 1px 3px rgba(0,0,0,0.5)';
 
   return (
-    <div className="transparent-card" style={{ backgroundColor: activeStyle.cardColor, border: 'none' }}>
+    <div 
+        className="transparent-card" 
+        style={{ 
+            backgroundColor: activeStyle.cardColor,
+            boxShadow: `0 0 50px 25px ${activeStyle.background}` // Fényudvar effektus
+        }}
+    >
       {sessionData?.topic && <h2 style={{ color: activeStyle.textColor, textShadow }}>{sessionData.topic}</h2>}
       <p style={{ color: activeStyle.textColor, textShadow }}>Írj be szavakat, és nézd, ahogy megjelennek a felhőben!</p>
       
@@ -151,7 +151,9 @@ const WordCloud = () => {
       </div>
 
       {isAdmin && (
-        <button onClick={saveAsPdf} style={{marginTop: '20px'}}>Mentés PDF-be</button>
+        <div style={{marginTop: '20px', textAlign: 'center'}}>
+            <button onClick={saveAsPdf}>Mentés PDF-be</button>
+        </div>
       )}
     </div>
   );
