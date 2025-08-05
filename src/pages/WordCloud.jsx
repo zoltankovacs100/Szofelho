@@ -96,7 +96,7 @@ const WordCloud = () => {
         createdAt: serverTimestamp(),
       });
       setInputValue('');
-    } catch (err) => {
+    } catch (err) {
       setError('Hiba történt a szó beküldésekor.');
     }
   };
