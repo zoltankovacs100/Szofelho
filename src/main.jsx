@@ -37,7 +37,7 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         {/* Guest Routes */}
-        <Route path="/" element={<GuestLogin />} />
+        <Route path="/" element={<AdminLogin />} />
         <Route path="/session/:sessionId" element={<WordCloud />} />
 
         {/* Admin Routes */}
