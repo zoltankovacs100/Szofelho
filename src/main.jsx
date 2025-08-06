@@ -39,6 +39,7 @@ const App = () => {
         {/* Guest Routes */}
         <Route path="/" element={<AdminLogin />} />
         <Route path="/session/:sessionId" element={<WordCloud />} />
+        <Route path="/pin" element={<GuestLogin />} />
 
         {/* Admin Routes */}
         <Route path="/admin/login" element={!user ? <AdminLogin /> : <Navigate to="/admin/dashboard" />} />
