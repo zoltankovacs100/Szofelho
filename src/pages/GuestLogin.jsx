@@ -35,7 +35,7 @@ const GuestLogin = () => {
   };
 
   return (
-    <div className="card" style={{ transform: 'scale(0.9)' }}>
+    <div className="card" style={{ padding: '1rem' }}>
       <h2>Csatlakozás munkamenethez</h2>
       <form onSubmit={handleJoinSession}>
         <input
