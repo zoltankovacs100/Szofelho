@@ -48,5 +48,16 @@ export const stylePresets = {
     wordColors: ['#ecf0f1', '#3498db', '#2c3e50', '#f1c40f', '#2980b9'],
     textColor: '#FFFFFF',
     cardColor: 'rgba(0, 0, 0, 0.25)'
+  },
+  'style-7': {
+    id: 'style-7',
+    name: 'Klasszikus',
+    background: '#ffffff',
+    wordColors: ['#2c3e50', '#34495e', '#7f8c8d', '#95a5a6', '#bdc3c7'],
+    textColor: '#2c3e50',
+    cardColor: 'rgba(0, 0, 0, 0.1)',
+    font: 'Impact',
+    rotate: () => Math.random() > 0.5 ? 0 : 90,
+    fontWeight: (d) => d.value > 1 ? 'bold' : 'normal'
   }
 };

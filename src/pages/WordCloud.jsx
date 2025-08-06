@@ -78,8 +78,9 @@ const WordCloud = () => {
       .size([containerWidth, containerHeight])
       .words(words.map(d => ({ ...d })))
       .padding(5)
-      .rotate(() => (Math.random() > 0.5 ? 90 : 0))
-      .font('Impact')
+      .rotate(activeStyle.rotate || (() => (Math.random() > 0.5 ? 90 : 0)))
+      .font(activeStyle.font || 'Impact')
+      .fontWeight(activeStyle.fontWeight || 'normal')
       .fontSize(d => d.value)
       .on('end', (generatedWords) => {
           setLayoutWords(generatedWords.map(word => ({
@@ -142,7 +143,12 @@ const WordCloud = () => {
             <g transform={`translate(${cloudContainerRef.current?.offsetWidth / 2}, ${cloudContainerRef.current?.offsetHeight / 2})`}>
                 {layoutWords.map((word, i) => (
                     <text key={i} textAnchor="middle" transform={`translate(${word.x}, ${word.y}) rotate(${word.rotate})`}
-                        style={{ fontSize: word.size, fontFamily: 'Impact', fill: word.color, }}>
+                        style={{ 
+    fontSize: word.size, 
+    fontFamily: activeStyle.font || 'Impact', 
+    fontWeight: activeStyle.fontWeight ? activeStyle.fontWeight(word) : 'normal',
+    fill: word.color,
+}}>
                         {word.text}
                     </text>
                 ))}
