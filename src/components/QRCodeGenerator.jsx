@@ -27,21 +27,21 @@ const QRCodeGenerator = ({ sessionUrl }) => {
 
   return (
     <div style={{ position: 'relative' }}>
-      <button 
-        onClick={handleQRClick}
-        style={{
-          background: 'rgba(255, 255, 255, 0.2)',
-          border: '1px solid rgba(255, 255, 255, 0.3)',
-          color: 'white',
-          padding: '8px 12px',
-          borderRadius: '6px',
-          cursor: 'pointer',
-          fontSize: '14px',
-          marginLeft: '10px'
-        }}
-      >
-        {showQR ? 'QR Kód elrejtése' : 'QR Kód megjelenítése'}
-      </button>
+             <button 
+         onClick={handleQRClick}
+         style={{
+           background: '#28a745',
+           border: 'none',
+           color: 'white',
+           padding: '5px 10px',
+           borderRadius: '6px',
+           cursor: 'pointer',
+           fontSize: '0.9rem',
+           marginLeft: '10px'
+         }}
+       >
+         {showQR ? 'QR Kód elrejtése' : 'QR Kód megjelenítése'}
+       </button>
       
       {showQR && (
         <div style={{
