@@ -3,44 +3,75 @@ import React, { useState, useEffect } from 'react';
 const QRCodeGenerator = ({ sessionUrl }) => {
   const [showQR, setShowQR] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   // Extract session ID from URL
   const sessionId = sessionUrl.split('/session/')[1];
 
-  const handleQRClick = () => {
-    const newShowQR = !showQR;
-    setShowQR(newShowQR);
-    
-    // Save to localStorage for the result page
-    if (sessionId) {
-      localStorage.setItem(`qr_show_${sessionId}`, newShowQR.toString());
+  const handleQRClick = async () => {
+    if (!showQR) {
+      // Ha megnyitjuk a QR kódot, először másoljuk a linket
+      setIsLoading(true);
+      
+      try {
+        // Link másolása
+        await navigator.clipboard.writeText(sessionUrl);
+        
+        // Késleltetés, hogy a felhasználó lássa a másolást
+        setTimeout(() => {
+          // QR kód generálása a másolt linkből
+          const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(sessionUrl)}&chco=000000&chld=L|0`;
+          setQrCodeUrl(qrUrl);
+          setShowQR(true);
+          setIsLoading(false);
+          
+          // Save to localStorage for the result page
+          if (sessionId) {
+            localStorage.setItem(`qr_show_${sessionId}`, 'true');
+          }
+        }, 500); // 500ms késleltetés
+        
+      } catch (err) {
+        console.error('Hiba a link másolásakor: ', err);
+        setIsLoading(false);
+        // Ha nem sikerül másolni, akkor is generáljuk a QR kódot
+        const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(sessionUrl)}&chco=000000&chld=L|0`;
+        setQrCodeUrl(qrUrl);
+        setShowQR(true);
+        
+        if (sessionId) {
+          localStorage.setItem(`qr_show_${sessionId}`, 'true');
+        }
+      }
+    } else {
+      // Ha bezárjuk a QR kódot
+      setShowQR(false);
+      setQrCodeUrl('');
+      
+      if (sessionId) {
+        localStorage.setItem(`qr_show_${sessionId}`, 'false');
+      }
     }
   };
-
-  useEffect(() => {
-    if (showQR && sessionUrl) {
-      // QR kód generálása a Google Charts API-val
-      const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(sessionUrl)}&chco=000000&chld=L|0`;
-      setQrCodeUrl(qrUrl);
-    }
-  }, [showQR, sessionUrl]);
 
   return (
     <div style={{ position: 'relative' }}>
              <button 
          onClick={handleQRClick}
+         disabled={isLoading}
          style={{
-           background: '#28a745',
+           background: isLoading ? '#6c757d' : '#28a745',
            border: 'none',
            color: 'white',
            padding: '5px 10px',
            borderRadius: '6px',
-           cursor: 'pointer',
+           cursor: isLoading ? 'not-allowed' : 'pointer',
            fontSize: '0.9rem',
-           marginLeft: '10px'
+           marginLeft: '10px',
+           opacity: isLoading ? 0.7 : 1
          }}
        >
-         {showQR ? 'QR Kód elrejtése' : 'QR Kód megjelenítése'}
+         {isLoading ? 'Másolás...' : (showQR ? 'QR Kód elrejtése' : 'QR Kód megjelenítése')}
        </button>
       
       {showQR && (
