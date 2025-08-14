@@ -40,7 +40,8 @@ export const stylePresets = {
     wordColors: ['#ff8a3a', '#f6ad55', '#2ec4b6', '#2bb68a', '#c56cf0', '#e2e8f0', '#fbd38d', '#94a3b8'],
     textColor: '#FFFFFF',
     cardColor: 'rgba(0, 0, 0, 0.2)',
-    useCanvas: true
+    useCanvas: true,
+    font: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
   },
   'style-6': {
     id: 'style-6',
@@ -60,5 +61,34 @@ export const stylePresets = {
     font: 'Impact',
     rotate: () => Math.random() > 0.5 ? 0 : 90,
     fontWeight: (d) => d.value > 1 ? 'bold' : 'normal'
+  },
+  'style-8': {
+    id: 'style-8',
+    name: 'Montserrat Modern',
+    background: '#0b0b0d',
+    wordColors: [
+      '#f2c94c', // sárga
+      '#f2994a', // narancs
+      '#eb5757', // piros
+      '#2d9cdb', // kék
+      '#56ccf2', // világoskék
+      '#27ae60', // zöld
+      '#6fcf97', // világoszöld
+      '#9b51e0', // lila
+      '#bb6bd9', // világoslila
+      '#333333'  // sötétszürke
+    ],
+    textColor: '#FFFFFF',
+    cardColor: 'rgba(0, 0, 0, 0.2)',
+    useCanvas: true,
+    useNewWordCloud: true,
+    font: 'Montserrat, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif',
+    rotations: [0, 0, 0, -10*Math.PI/180, 10*Math.PI/180, -20*Math.PI/180, 20*Math.PI/180],
+    baseFontPx: 18,
+    maxFontPx: 110,
+    padding: 3,
+    spiralStep: 3,
+    iterationsPerWord: 3000,
+    hoverTooltip: true
   }
 };

@@ -8,6 +8,7 @@ import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { stylePresets } from '../styles';
 import CanvasWordCloud from '../components/CanvasWordCloud';
+import NewWordCloud from '../components/WordCloud';
 import QRCodeDisplay from '../components/QRCodeDisplay';
 
 const WordCloud = () => {
@@ -138,6 +139,27 @@ const WordCloud = () => {
       pdf.text(`Generálva: ${currentDate}`, 20, 45);
     }
     
+    // Ha új WordCloud komponens van
+    if (activeStyle.useNewWordCloud) {
+      const canvas = cloudContainerRef.current.querySelector('canvas');
+      if (canvas) {
+        const imgData = canvas.toDataURL('image/png');
+        const imgWidth = pageWidth - 40; // 20mm margó mindkét oldalon
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        
+        // Ha túl hosszú a kép, akkor új oldalra kerül
+        let yPosition = 60; // Kérdés alatt
+        if (yPosition + imgHeight > pageHeight - 20) {
+          pdf.addPage();
+          yPosition = 20;
+        }
+        
+        pdf.addImage(imgData, 'PNG', 20, yPosition, imgWidth, imgHeight);
+        pdf.save(`${sessionData.topic || 'szofelho'}.pdf`);
+        return;
+      }
+    }
+    
     // Ha Canvas-alapú szófelhő van
     if (activeStyle.useCanvas) {
       const canvas = cloudContainerRef.current.querySelector('canvas');
@@ -199,7 +221,20 @@ const WordCloud = () => {
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <div className="wordcloud-container" ref={cloudContainerRef}>
-        {activeStyle.useCanvas ? (
+        {activeStyle.useNewWordCloud ? (
+          <NewWordCloud 
+            words={words.map(word => ({ text: word.text, weight: word.value }))}
+            background={activeStyle.background}
+            palette={activeStyle.wordColors}
+            rotations={activeStyle.rotations || [0, 0, 0, 0, -10 * Math.PI / 180, 10 * Math.PI / 180, -20 * Math.PI / 180, 20 * Math.PI / 180]}
+            baseFontPx={activeStyle.baseFontPx || 18}
+            maxFontPx={activeStyle.maxFontPx || 110}
+            padding={activeStyle.padding || 3}
+            spiralStep={activeStyle.spiralStep || 3}
+            iterationsPerWord={activeStyle.iterationsPerWord || 3000}
+            hoverTooltip={activeStyle.hoverTooltip !== false}
+          />
+        ) : activeStyle.useCanvas ? (
           <CanvasWordCloud 
             words={words} 
             style={activeStyle} 
@@ -210,7 +245,7 @@ const WordCloud = () => {
             <g transform={`translate(${cloudContainerRef.current?.offsetWidth / 2}, ${cloudContainerRef.current?.offsetHeight / 2})`}>
                 {layoutWords.map((word, i) => (
                     <text key={i} textAnchor="middle" transform={`translate(${word.x}, ${word.y}) rotate(${word.rotate})`}
-                        style={{ fontSize: word.size, fontFamily: 'Impact', fill: word.color, }}>
+                        style={{ fontSize: word.size, fontFamily: activeStyle.font || 'Impact', fill: word.color, }}>
                         {word.text}
                     </text>
                 ))}
