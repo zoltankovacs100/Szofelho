@@ -22,7 +22,7 @@ const QRCodeGenerator = ({ sessionUrl }) => {
            // QR kód generálása a teljes URL-ből
            console.log('QRCodeGenerator - sessionUrl:', sessionUrl);
            console.log('QRCodeGenerator - sessionId:', sessionId);
-           const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(sessionUrl)}&chco=000000&chld=L|0`;
+           const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(sessionUrl)}`;
            console.log('QRCodeGenerator - qrUrl:', qrUrl);
            setQrCodeUrl(qrUrl);
            setShowQR(true);
@@ -39,7 +39,7 @@ const QRCodeGenerator = ({ sessionUrl }) => {
         setIsLoading(false);
                  // Ha nem sikerül másolni, akkor is generáljuk a QR kódot
          console.log('QRCodeGenerator - sessionUrl (fallback):', sessionUrl);
-         const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(sessionUrl)}&chco=000000&chld=L|0`;
+         const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(sessionUrl)}`;
          console.log('QRCodeGenerator - qrUrl (fallback):', qrUrl);
          setQrCodeUrl(qrUrl);
          setShowQR(true);

@@ -19,7 +19,7 @@ const QRCodeDisplay = ({ sessionUrl }) => {
        console.log('QRCodeDisplay - sessionId:', sessionId);
        // QR kód generálása a Google Charts API-val
        // A sessionUrl már a teljes URL-t tartalmazza
-       const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=${encodeURIComponent(sessionUrl)}&chco=000000&chld=L|0`;
+       const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(sessionUrl)}`;
        console.log('QRCodeDisplay - qrUrl:', qrUrl);
        setQrCodeUrl(qrUrl);
      }
