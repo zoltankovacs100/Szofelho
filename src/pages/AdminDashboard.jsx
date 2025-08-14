@@ -4,6 +4,7 @@ import { auth, db } from '../firebase';
 import { signOut } from "firebase/auth";
 import { collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, getDocs } from "firebase/firestore";
 import StylePicker from '../components/StylePicker'; // Komponens importálása
+import QRCodeGenerator from '../components/QRCodeGenerator';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -122,6 +123,7 @@ const AdminDashboard = () => {
                         <button onClick={() => copyDirectLink(session.id)} style={{padding: '5px 10px', fontSize: '0.9rem', marginLeft: '10px'}}>
                             {copiedSessionId === session.id ? 'Másolva!' : 'Link másolása'}
                         </button>
+                        <QRCodeGenerator sessionUrl={`${window.location.origin}/session/${session.id}`} />
                     </div>
                 </div>
                 <div style={{width: '100%', textAlign: 'left', marginTop: '10px'}}>

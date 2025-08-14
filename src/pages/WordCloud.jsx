@@ -8,7 +8,7 @@ import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { stylePresets } from '../styles';
 import CanvasWordCloud from '../components/CanvasWordCloud';
-import QRCodeGenerator from '../components/QRCodeGenerator';
+import QRCodeDisplay from '../components/QRCodeDisplay';
 
 const WordCloud = () => {
   const { sessionId } = useParams();
@@ -18,6 +18,7 @@ const WordCloud = () => {
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
+  const [showQRCode, setShowQRCode] = useState(false);
   const cloudContainerRef = useRef(null); // Ezt a ref-et fogjuk használni a PDF mentéshez
 
   const activeStyle = sessionData ? stylePresets[sessionData.styleId] || stylePresets['style-4'] : stylePresets['style-4'];
@@ -29,6 +30,12 @@ const WordCloud = () => {
     });
     return () => unsubscribe();
   }, []);
+
+  // Check if QR code should be shown
+  useEffect(() => {
+    const shouldShowQR = localStorage.getItem(`qr_show_${sessionId}`);
+    setShowQRCode(shouldShowQR === 'true');
+  }, [sessionId]);
   
   // Fetch session data
   useEffect(() => {
@@ -177,12 +184,13 @@ const WordCloud = () => {
   return (
     <div className="transparent-card" style={{ backgroundColor: activeStyle.cardColor, border: 'none' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <div>
+        <div style={{ flex: 1, marginRight: showQRCode ? '180px' : '0px', transition: 'margin-right 0.3s ease' }}>
           {sessionData?.topic && <h2 style={{ color: activeStyle.textColor, textShadow }}>{sessionData.topic}</h2>}
           <p style={{ color: activeStyle.textColor, textShadow }}>Írj be szavakat, és nézd, ahogy megjelennek a felhőben!</p>
         </div>
-        <QRCodeGenerator sessionUrl={window.location.href} />
       </div>
+      
+      {showQRCode && <QRCodeDisplay sessionUrl={window.location.href} />}
       
       <form onSubmit={handleWordSubmit}>
         <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Pl. innováció, csapatmunka..."/>

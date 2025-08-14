@@ -4,6 +4,19 @@ const QRCodeGenerator = ({ sessionUrl }) => {
   const [showQR, setShowQR] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState('');
 
+  // Extract session ID from URL
+  const sessionId = sessionUrl.split('/session/')[1];
+
+  const handleQRClick = () => {
+    const newShowQR = !showQR;
+    setShowQR(newShowQR);
+    
+    // Save to localStorage for the result page
+    if (sessionId) {
+      localStorage.setItem(`qr_show_${sessionId}`, newShowQR.toString());
+    }
+  };
+
   useEffect(() => {
     if (showQR && sessionUrl) {
       // QR kód generálása a Google Charts API-val
@@ -15,7 +28,7 @@ const QRCodeGenerator = ({ sessionUrl }) => {
   return (
     <div style={{ position: 'relative' }}>
       <button 
-        onClick={() => setShowQR(!showQR)}
+        onClick={handleQRClick}
         style={{
           background: 'rgba(255, 255, 255, 0.2)',
           border: '1px solid rgba(255, 255, 255, 0.3)',
@@ -27,7 +40,7 @@ const QRCodeGenerator = ({ sessionUrl }) => {
           marginLeft: '10px'
         }}
       >
-        QR Kód
+        {showQR ? 'QR Kód elrejtése' : 'QR Kód megjelenítése'}
       </button>
       
       {showQR && (
