@@ -38,38 +38,31 @@ const QRCodeDisplay = ({ sessionUrl }) => {
       border: '1px solid #ddd',
       maxWidth: '170px'
     }}>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '8px'
-      }}>
-        <h5 style={{ 
-          margin: 0, 
-          color: '#333', 
-          fontSize: '14px'
-        }}>
-          QR Kód
-        </h5>
-        <button 
-          onClick={handleClose}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '16px',
-            cursor: 'pointer',
-            color: '#666',
-            padding: '0',
-            width: '20px',
-            height: '20px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          ×
-        </button>
-      </div>
+             <div style={{
+         display: 'flex',
+         justifyContent: 'flex-end',
+         alignItems: 'center',
+         marginBottom: '8px'
+       }}>
+         <button 
+           onClick={handleClose}
+           style={{
+             background: 'none',
+             border: 'none',
+             fontSize: '16px',
+             cursor: 'pointer',
+             color: '#666',
+             padding: '0',
+             width: '20px',
+             height: '20px',
+             display: 'flex',
+             alignItems: 'center',
+             justifyContent: 'center'
+           }}
+         >
+           ×
+         </button>
+       </div>
       <img 
         src={qrCodeUrl} 
         alt="QR Code" 

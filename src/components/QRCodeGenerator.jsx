@@ -17,27 +17,29 @@ const QRCodeGenerator = ({ sessionUrl }) => {
         // Link másolása
         await navigator.clipboard.writeText(sessionUrl);
         
-        // Késleltetés, hogy a felhasználó lássa a másolást
-        setTimeout(() => {
-          // QR kód generálása a másolt linkből
-          const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(sessionUrl)}&chco=000000&chld=L|0`;
-          setQrCodeUrl(qrUrl);
-          setShowQR(true);
-          setIsLoading(false);
-          
-          // Save to localStorage for the result page
-          if (sessionId) {
-            localStorage.setItem(`qr_show_${sessionId}`, 'true');
-          }
-        }, 500); // 500ms késleltetés
+                 // Késleltetés, hogy a felhasználó lássa a másolást
+         setTimeout(() => {
+           // QR kód generálása a teljes URL-ből
+           const fullUrl = window.location.origin + sessionUrl;
+           const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(fullUrl)}&chco=000000&chld=L|0`;
+           setQrCodeUrl(qrUrl);
+           setShowQR(true);
+           setIsLoading(false);
+           
+           // Save to localStorage for the result page
+           if (sessionId) {
+             localStorage.setItem(`qr_show_${sessionId}`, 'true');
+           }
+         }, 500); // 500ms késleltetés
         
       } catch (err) {
         console.error('Hiba a link másolásakor: ', err);
         setIsLoading(false);
-        // Ha nem sikerül másolni, akkor is generáljuk a QR kódot
-        const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(sessionUrl)}&chco=000000&chld=L|0`;
-        setQrCodeUrl(qrUrl);
-        setShowQR(true);
+                 // Ha nem sikerül másolni, akkor is generáljuk a QR kódot
+         const fullUrl = window.location.origin + sessionUrl;
+         const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(fullUrl)}&chco=000000&chld=L|0`;
+         setQrCodeUrl(qrUrl);
+         setShowQR(true);
         
         if (sessionId) {
           localStorage.setItem(`qr_show_${sessionId}`, 'true');
@@ -86,32 +88,31 @@ const QRCodeGenerator = ({ sessionUrl }) => {
           zIndex: 1000,
           border: '1px solid #ddd'
         }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '10px'
-          }}>
-            <h4 style={{ margin: 0, color: '#333' }}>QR Kód</h4>
-            <button 
-              onClick={() => setShowQR(false)}
-              style={{
-                background: 'none',
-                border: 'none',
-                fontSize: '18px',
-                cursor: 'pointer',
-                color: '#666',
-                padding: '0',
-                width: '24px',
-                height: '24px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              ×
-            </button>
-          </div>
+                     <div style={{
+             display: 'flex',
+             justifyContent: 'flex-end',
+             alignItems: 'center',
+             marginBottom: '10px'
+           }}>
+             <button 
+               onClick={() => setShowQR(false)}
+               style={{
+                 background: 'none',
+                 border: 'none',
+                 fontSize: '18px',
+                 cursor: 'pointer',
+                 color: '#666',
+                 padding: '0',
+                 width: '24px',
+                 height: '24px',
+                 display: 'flex',
+                 alignItems: 'center',
+                 justifyContent: 'center'
+               }}
+             >
+               ×
+             </button>
+           </div>
           <img 
             src={qrCodeUrl} 
             alt="QR Code" 
