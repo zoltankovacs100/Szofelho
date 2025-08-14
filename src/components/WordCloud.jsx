@@ -26,6 +26,7 @@ export default function WordCloud({
   spiralStep = 3,
   iterationsPerWord = 3000,
   hoverTooltip = true,
+  fontFamily = "Montserrat, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
 }) {
   const wrapperRef = useRef(null);
   const canvasRef = useRef(null);
@@ -67,7 +68,7 @@ export default function WordCloud({
 
   const measureWord = (ctx, text, fontPx, angle) => {
     ctx.save();
-    ctx.font = `${fontPx}px Montserrat,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif`;
+    ctx.font = `${fontPx}px ${fontFamily}`;
     const metrics = ctx.measureText(text);
     const w = Math.ceil(metrics.width);
     const h = Math.ceil(fontPx * 1.05);
@@ -115,7 +116,7 @@ export default function WordCloud({
         ctx.save();
         ctx.translate(x + m.bw / 2, y + m.bh / 2);
         ctx.rotate(angle);
-        ctx.font = `${fontPx}px Montserrat,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif`;
+        ctx.font = `${fontPx}px ${fontFamily}`;
         ctx.fillStyle = pickColor(word);
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
@@ -208,7 +209,7 @@ export default function WordCloud({
     setCanvasSize();
     drawAll();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deviceRatio, words, background, palette, rotations, baseFontPx, maxFontPx, padding, spiralStep, iterationsPerWord]);
+  }, [deviceRatio, words, background, palette, rotations, baseFontPx, maxFontPx, padding, spiralStep, iterationsPerWord, fontFamily]);
 
   // Reszponzív újrarajz
   useEffect(() => {

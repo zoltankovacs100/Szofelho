@@ -233,6 +233,7 @@ const WordCloud = () => {
             spiralStep={activeStyle.spiralStep || 3}
             iterationsPerWord={activeStyle.iterationsPerWord || 3000}
             hoverTooltip={activeStyle.hoverTooltip !== false}
+            fontFamily={activeStyle.font || "Montserrat, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif"}
           />
         ) : activeStyle.useCanvas ? (
           <CanvasWordCloud 

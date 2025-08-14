@@ -1,0 +1,172 @@
+/* Lokális betűtípusok - Offline környezethez */
+
+/* 1. Montserrat - Modern, tiszta */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-Regular.woff2') format('woff2'),
+       url('/fonts/Montserrat-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-Bold.woff2') format('woff2'),
+       url('/fonts/Montserrat-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 2. Roboto - Google stílusú */
+@font-face {
+  font-family: 'Roboto';
+  src: url('/fonts/Roboto-Regular.woff2') format('woff2'),
+       url('/fonts/Roboto-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('/fonts/Roboto-Bold.woff2') format('woff2'),
+       url('/fonts/Roboto-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 3. Open Sans - Olvasható, barátságos */
+@font-face {
+  font-family: 'Open Sans';
+  src: url('/fonts/OpenSans-Regular.woff2') format('woff2'),
+       url('/fonts/OpenSans-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('/fonts/OpenSans-Bold.woff2') format('woff2'),
+       url('/fonts/OpenSans-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 4. Lato - Modern, kifinomult */
+@font-face {
+  font-family: 'Lato';
+  src: url('/fonts/Lato-Regular.woff2') format('woff2'),
+       url('/fonts/Lato-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('/fonts/Lato-Bold.woff2') format('woff2'),
+       url('/fonts/Lato-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 5. Poppins - Geometrikus, modern */
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Regular.woff2') format('woff2'),
+       url('/fonts/Poppins-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Bold.woff2') format('woff2'),
+       url('/fonts/Poppins-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 6. Inter - Kódoló-barát */
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-Regular.woff2') format('woff2'),
+       url('/fonts/Inter-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-Bold.woff2') format('woff2'),
+       url('/fonts/Inter-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 7. Nunito - Kerek, barátságos */
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/Nunito-Regular.woff2') format('woff2'),
+       url('/fonts/Nunito-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/Nunito-Bold.woff2') format('woff2'),
+       url('/fonts/Nunito-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 8. Source Sans Pro - Professzionális */
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('/fonts/SourceSansPro-Regular.woff2') format('woff2'),
+       url('/fonts/SourceSansPro-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('/fonts/SourceSansPro-Bold.woff2') format('woff2'),
+       url('/fonts/SourceSansPro-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 9. Ubuntu - Linux stílusú */
+@font-face {
+  font-family: 'Ubuntu';
+  src: url('/fonts/Ubuntu-Regular.woff2') format('woff2'),
+       url('/fonts/Ubuntu-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ubuntu';
+  src: url('/fonts/Ubuntu-Bold.woff2') format('woff2'),
+       url('/fonts/Ubuntu-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
