@@ -4,7 +4,7 @@ const QRCodeDisplay = ({ sessionUrl }) => {
   const [qrCodeUrl, setQrCodeUrl] = useState('');
 
   // Extract session ID from URL
-  const sessionId = sessionUrl.split('/session/')[1];
+  const sessionId = sessionUrl.includes('/session/') ? sessionUrl.split('/session/')[1] : null;
 
   const handleClose = () => {
     if (sessionId) {
@@ -15,12 +15,15 @@ const QRCodeDisplay = ({ sessionUrl }) => {
 
      useEffect(() => {
      if (sessionUrl) {
+       console.log('QRCodeDisplay - sessionUrl:', sessionUrl);
+       console.log('QRCodeDisplay - sessionId:', sessionId);
        // QR kód generálása a Google Charts API-val
        // A sessionUrl már a teljes URL-t tartalmazza
        const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=${encodeURIComponent(sessionUrl)}&chco=000000&chld=L|0`;
+       console.log('QRCodeDisplay - qrUrl:', qrUrl);
        setQrCodeUrl(qrUrl);
      }
-   }, [sessionUrl]);
+   }, [sessionUrl, sessionId]);
 
   if (!qrCodeUrl) return null;
 
