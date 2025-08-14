@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { auth, db } from '../firebase';
-import { signOut } from "firebase/auth";
+import { db } from '../firebase';
 import { collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, getDocs } from "firebase/firestore";
 import StylePicker from '../components/StylePicker'; // Komponens importálása
 import QRCodeGenerator from '../components/QRCodeGenerator';
 
 const AdminDashboard = () => {
-  const navigate = useNavigate();
   const [sessions, setSessions] = useState([]);
   const [newTopic, setNewTopic] = useState('');
   const [error, setError] = useState(null);
@@ -83,19 +80,12 @@ const AdminDashboard = () => {
     });
   };
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      navigate('/admin/login');
-    } catch (error) {
-      console.error("Hiba a kijelentkezés során:", error);
-    }
-  };
+  // KIJELENTKEZÉS FÜGGVÉNY ELTÁVOLÍTVA - JELSZÓ VÉDETTSÉG KIKAPCSOLVA
 
   return (
     <div className="card">
       <h2>Admin Felület</h2>
-      <button className="logout" style={{float: 'right'}} onClick={handleLogout}>Kijelentkezés</button>
+      {/* KIJELENTKEZÉS GOMB ELTÁVOLÍTVA - JELSZÓ VÉDETTSÉG KIKAPCSOLVA */}
       
       <h3>Új munkamenet</h3>
       <form onSubmit={createSession}>

@@ -11,9 +11,10 @@ import WordCloud from './pages/WordCloud';
 import './style.css';
 
 const ProtectedRoute = ({ user, children }) => {
-  if (!user) {
-    return <Navigate to="/admin/login" replace />;
-  }
+  // JELSZÓ VÉDETTSÉG KIKAPCSOLVA - 2025.08.14 11:30
+  // if (!user) {
+  //   return <Navigate to="/admin/login" replace />;
+  // }
   return children;
 };
 
@@ -37,19 +38,15 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         {/* Guest Routes */}
-        <Route path="/" element={<AdminLogin />} />
+        <Route path="/" element={<Navigate to="/admin/dashboard" />} />
         <Route path="/session/:sessionId" element={<WordCloud />} />
         <Route path="/pin" element={<GuestLogin />} />
 
-        {/* Admin Routes */}
-        <Route path="/admin/login" element={!user ? <AdminLogin /> : <Navigate to="/admin/dashboard" />} />
+        {/* Admin Routes - JELSZÓ VÉDETTSÉG KIKAPCSOLVA */}
+        <Route path="/admin/login" element={<Navigate to="/admin/dashboard" />} />
         <Route
           path="/admin/dashboard"
-          element={
-            <ProtectedRoute user={user}>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
+          element={<AdminDashboard />}
         />
         
         {/* Fallback route */}
