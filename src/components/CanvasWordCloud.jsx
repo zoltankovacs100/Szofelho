@@ -8,7 +8,7 @@ const CanvasWordCloud = ({ words, style, containerRef }) => {
   // Konfiguráció a "vadvirág" stílushoz igazítva
   const CONFIG = {
     background: style.background,
-    fontFamily: '"Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif',
+    fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     palette: style.wordColors,
     rotations: [0, 0, 0, 0, -10*Math.PI/180, 10*Math.PI/180, -20*Math.PI/180, 20*Math.PI/180],
     baseFontPx: 18,
@@ -20,14 +20,6 @@ const CanvasWordCloud = ({ words, style, containerRef }) => {
     clickable: true,
     responsive: true
   };
-
-  // Betűtípus betöltése
-  useEffect(() => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&display=swap';
-    document.head.appendChild(link);
-  }, []);
 
   const pickColor = (word) => {
     if (word.color) return word.color;

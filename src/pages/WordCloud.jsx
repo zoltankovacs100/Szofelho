@@ -8,6 +8,7 @@ import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { stylePresets } from '../styles';
 import CanvasWordCloud from '../components/CanvasWordCloud';
+import QRCodeGenerator from '../components/QRCodeGenerator';
 
 const WordCloud = () => {
   const { sessionId } = useParams();
@@ -110,34 +111,63 @@ const WordCloud = () => {
   const saveAsPdf = () => {
     if (!cloudContainerRef.current) return;
     
-    // Ha Canvas-alapú szófelhő van, akkor közvetlenül a canvas-t mentjük
+    const pdf = new jsPDF('portrait', 'mm', 'a4');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    
+    // Kérdés hozzáadása a PDF tetejére
+    if (sessionData?.topic) {
+      pdf.setFontSize(20);
+      pdf.setFont('helvetica', 'bold');
+      pdf.setTextColor(50, 50, 50);
+      const titleWidth = pdf.getTextWidth(sessionData.topic);
+      const titleX = (pageWidth - titleWidth) / 2;
+      pdf.text(sessionData.topic, titleX, 30);
+      
+      // Dátum hozzáadása
+      pdf.setFontSize(12);
+      pdf.setFont('helvetica', 'normal');
+      const currentDate = new Date().toLocaleDateString('hu-HU');
+      pdf.text(`Generálva: ${currentDate}`, 20, 45);
+    }
+    
+    // Ha Canvas-alapú szófelhő van
     if (activeStyle.useCanvas) {
       const canvas = cloudContainerRef.current.querySelector('canvas');
       if (canvas) {
         const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF({
-          orientation: canvas.width > canvas.height ? 'landscape' : 'portrait',
-          unit: 'px',
-          format: [canvas.width, canvas.height]
-        });
-        pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+        const imgWidth = pageWidth - 40; // 20mm margó mindkét oldalon
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        
+        // Ha túl hosszú a kép, akkor új oldalra kerül
+        let yPosition = 60; // Kérdés alatt
+        if (yPosition + imgHeight > pageHeight - 20) {
+          pdf.addPage();
+          yPosition = 20;
+        }
+        
+        pdf.addImage(imgData, 'PNG', 20, yPosition, imgWidth, imgHeight);
         pdf.save(`${sessionData.topic || 'szofelho'}.pdf`);
         return;
       }
     }
     
-    // SVG-alapú szófelhő esetén a teljes konténert mentjük
+    // SVG-alapú szófelhő esetén
     html2canvas(cloudContainerRef.current, { 
         backgroundColor: activeStyle.background,
         useCORS: true 
     }).then(canvas => {
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: canvas.width > canvas.height ? 'landscape' : 'portrait',
-        unit: 'px',
-        format: [canvas.width, canvas.height]
-      });
-      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+      const imgWidth = pageWidth - 40;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      
+      let yPosition = 60;
+      if (yPosition + imgHeight > pageHeight - 20) {
+        pdf.addPage();
+        yPosition = 20;
+      }
+      
+      pdf.addImage(imgData, 'PNG', 20, yPosition, imgWidth, imgHeight);
       pdf.save(`${sessionData.topic || 'szofelho'}.pdf`);
     });
   };
@@ -146,8 +176,13 @@ const WordCloud = () => {
 
   return (
     <div className="transparent-card" style={{ backgroundColor: activeStyle.cardColor, border: 'none' }}>
-      {sessionData?.topic && <h2 style={{ color: activeStyle.textColor, textShadow }}>{sessionData.topic}</h2>}
-      <p style={{ color: activeStyle.textColor, textShadow }}>Írj be szavakat, és nézd, ahogy megjelennek a felhőben!</p>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <div>
+          {sessionData?.topic && <h2 style={{ color: activeStyle.textColor, textShadow }}>{sessionData.topic}</h2>}
+          <p style={{ color: activeStyle.textColor, textShadow }}>Írj be szavakat, és nézd, ahogy megjelennek a felhőben!</p>
+        </div>
+        <QRCodeGenerator sessionUrl={window.location.href} />
+      </div>
       
       <form onSubmit={handleWordSubmit}>
         <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Pl. innováció, csapatmunka..."/>
