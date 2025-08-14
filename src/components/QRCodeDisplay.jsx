@@ -13,15 +13,14 @@ const QRCodeDisplay = ({ sessionUrl }) => {
     }
   };
 
-  useEffect(() => {
-    if (sessionUrl) {
-      // QR kód generálása a Google Charts API-val
-      // Használjuk a teljes URL-t, nem csak a session részt
-      const fullUrl = window.location.origin + sessionUrl;
-      const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=${encodeURIComponent(fullUrl)}&chco=000000&chld=L|0`;
-      setQrCodeUrl(qrUrl);
-    }
-  }, [sessionUrl]);
+     useEffect(() => {
+     if (sessionUrl) {
+       // QR kód generálása a Google Charts API-val
+       // A sessionUrl már a teljes URL-t tartalmazza
+       const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=${encodeURIComponent(sessionUrl)}&chco=000000&chld=L|0`;
+       setQrCodeUrl(qrUrl);
+     }
+   }, [sessionUrl]);
 
   if (!qrCodeUrl) return null;
 

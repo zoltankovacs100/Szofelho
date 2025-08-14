@@ -20,8 +20,7 @@ const QRCodeGenerator = ({ sessionUrl }) => {
                  // Késleltetés, hogy a felhasználó lássa a másolást
          setTimeout(() => {
            // QR kód generálása a teljes URL-ből
-           const fullUrl = window.location.origin + sessionUrl;
-           const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(fullUrl)}&chco=000000&chld=L|0`;
+           const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(sessionUrl)}&chco=000000&chld=L|0`;
            setQrCodeUrl(qrUrl);
            setShowQR(true);
            setIsLoading(false);
@@ -36,8 +35,7 @@ const QRCodeGenerator = ({ sessionUrl }) => {
         console.error('Hiba a link másolásakor: ', err);
         setIsLoading(false);
                  // Ha nem sikerül másolni, akkor is generáljuk a QR kódot
-         const fullUrl = window.location.origin + sessionUrl;
-         const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(fullUrl)}&chco=000000&chld=L|0`;
+         const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(sessionUrl)}&chco=000000&chld=L|0`;
          setQrCodeUrl(qrUrl);
          setShowQR(true);
         
