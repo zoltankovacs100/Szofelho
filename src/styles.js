@@ -36,10 +36,11 @@ export const stylePresets = {
   'style-5': {
     id: 'style-5',
     name: 'Vadvirág',
-    background: '#9b59b6',
-    wordColors: ['#f1c40f', '#2ecc71', '#ecf0f1', '#e74c3c', '#1abc9c'],
+    background: '#0b0b0d',
+    wordColors: ['#ff8a3a', '#f6ad55', '#2ec4b6', '#2bb68a', '#c56cf0', '#e2e8f0', '#fbd38d', '#94a3b8'],
     textColor: '#FFFFFF',
-    cardColor: 'rgba(0, 0, 0, 0.2)'
+    cardColor: 'rgba(0, 0, 0, 0.2)',
+    useCanvas: true
   },
   'style-6': {
     id: 'style-6',

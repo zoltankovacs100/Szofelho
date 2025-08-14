@@ -7,6 +7,7 @@ import cloud from 'd3-cloud';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { stylePresets } from '../styles';
+import CanvasWordCloud from '../components/CanvasWordCloud';
 
 const WordCloud = () => {
   const { sessionId } = useParams();
@@ -108,9 +109,26 @@ const WordCloud = () => {
 
   const saveAsPdf = () => {
     if (!cloudContainerRef.current) return;
-    // A teljes konténert mentjük, nem csak az SVG-t
+    
+    // Ha Canvas-alapú szófelhő van, akkor közvetlenül a canvas-t mentjük
+    if (activeStyle.useCanvas) {
+      const canvas = cloudContainerRef.current.querySelector('canvas');
+      if (canvas) {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({
+          orientation: canvas.width > canvas.height ? 'landscape' : 'portrait',
+          unit: 'px',
+          format: [canvas.width, canvas.height]
+        });
+        pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+        pdf.save(`${sessionData.topic || 'szofelho'}.pdf`);
+        return;
+      }
+    }
+    
+    // SVG-alapú szófelhő esetén a teljes konténert mentjük
     html2canvas(cloudContainerRef.current, { 
-        backgroundColor: activeStyle.background, // A háttérszínt is rárakjuk a képre
+        backgroundColor: activeStyle.background,
         useCORS: true 
     }).then(canvas => {
       const imgData = canvas.toDataURL('image/png');
@@ -138,7 +156,14 @@ const WordCloud = () => {
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <div className="wordcloud-container" ref={cloudContainerRef}>
-         <svg width={cloudContainerRef.current?.offsetWidth} height={cloudContainerRef.current?.offsetHeight}>
+        {activeStyle.useCanvas ? (
+          <CanvasWordCloud 
+            words={words} 
+            style={activeStyle} 
+            containerRef={cloudContainerRef}
+          />
+        ) : (
+          <svg width={cloudContainerRef.current?.offsetWidth} height={cloudContainerRef.current?.offsetHeight}>
             <g transform={`translate(${cloudContainerRef.current?.offsetWidth / 2}, ${cloudContainerRef.current?.offsetHeight / 2})`}>
                 {layoutWords.map((word, i) => (
                     <text key={i} textAnchor="middle" transform={`translate(${word.x}, ${word.y}) rotate(${word.rotate})`}
@@ -147,7 +172,8 @@ const WordCloud = () => {
                     </text>
                 ))}
             </g>
-        </svg>
+          </svg>
+        )}
       </div>
 
       {isAdmin && (
