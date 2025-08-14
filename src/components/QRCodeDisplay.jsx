@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
+// MŰKÖDŐ VERZIÓ - 2025.08.14 11:30
+// QR kód megjelenítés QR Server API-val (https://api.qrserver.com)
+// Google Charts API helyett, mert az 404-es hibát adott
 const QRCodeDisplay = ({ sessionUrl }) => {
   const [qrCodeUrl, setQrCodeUrl] = useState('');
 
