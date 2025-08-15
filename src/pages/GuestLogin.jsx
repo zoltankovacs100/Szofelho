@@ -35,19 +35,32 @@ const GuestLogin = () => {
   };
 
   return (
-    <div className="card" style={{ padding: '1rem' }}>
-      <h2>Csatlakozás munkamenethez</h2>
-      <form onSubmit={handleJoinSession}>
-        <input
-          type="text"
-          value={pin}
-          onChange={(e) => setPin(e.target.value)}
-          placeholder="PIN kód"
-          maxLength="6"
-        />
-        <button type="submit">Csatlakozás</button>
-      </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="guest-login-container">
+      <div className="guest-login-card">
+        <div className="guest-login-header">
+          <h1 className="guest-login-title">PIN Kód: {pin || '______'}</h1>
+          <p className="guest-login-subtitle">Írj be szavakat, és kattints a Beküldés gombra!</p>
+        </div>
+        
+        <form onSubmit={handleJoinSession} className="guest-login-form">
+          <div className="pin-input-group">
+            <input
+              type="text"
+              value={pin}
+              onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))}
+              placeholder="PIN kód megadása"
+              maxLength="6"
+              className="pin-input"
+              autoFocus
+            />
+            <button type="submit" className="pin-submit-btn">
+              Csatlakozás
+            </button>
+          </div>
+        </form>
+        
+        {error && <div className="pin-error">{error}</div>}
+      </div>
     </div>
   );
 };
