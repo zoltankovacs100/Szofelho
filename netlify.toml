@@ -1,11 +1,16 @@
-# Netlify build and redirect configuration
+# Netlify Build Settings
 # https://docs.netlify.com/configure-builds/file-based-configuration/
 
 [build]
-  # Build command
+  # Build command to run
   command = "npm run build"
+
   # Directory to publish
   publish = "dist"
+
+[build.environment]
+  # Specify Node.js version
+  NODE_VERSION = "20"
 
 # Redirect rule for Single Page Applications (SPAs)
 [[redirects]]
