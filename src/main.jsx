@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
 import { auth } from './firebase';
 
 import AdminLogin from './pages/AdminLogin';
@@ -24,9 +24,22 @@ const App = () => {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        setLoading(false);
+      } else {
+        // If no user is signed in, sign in anonymously
+        signInAnonymously(auth)
+          .then((anonUser) => {
+            setUser(anonUser.user);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.error("Anonymous sign-in failed:", error);
+            setLoading(false);
+          });
+      }
     });
     return () => unsubscribe();
   }, []);
