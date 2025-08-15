@@ -208,7 +208,23 @@ const WordCloud = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <div style={{ flex: 1, marginRight: showQRCode ? '180px' : '0px', transition: 'margin-right 0.3s ease' }}>
           {sessionData?.topic && <h2 style={{ color: activeStyle.textColor, textShadow }}>{sessionData.topic}</h2>}
-          <p style={{ color: activeStyle.textColor, textShadow }}>Írj be szavakat, és nézd, ahogy megjelennek a felhőben!</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', flexWrap: 'wrap' }}>
+            <span style={{ 
+              color: activeStyle.textColor, 
+              textShadow, 
+              fontSize: '1.2rem', 
+              fontWeight: '600',
+              background: 'rgba(255,255,255,0.1)',
+              padding: '8px 16px',
+              borderRadius: '8px',
+              border: '2px solid rgba(255,255,255,0.2)'
+            }}>
+              PIN Kód: {sessionData?.pin || '______'}
+            </span>
+            <span style={{ color: activeStyle.textColor, textShadow, fontSize: '1rem' }}>
+              Írj be szavakat, és kattints a Beküldés gombra!
+            </span>
+          </div>
         </div>
       </div>
       

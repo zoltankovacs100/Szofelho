@@ -134,7 +134,7 @@ const AdminDashboard = () => {
                       <h3 className="session-topic">{session.topic}</h3>
                                              <div className="session-meta">
                          <button 
-                           onClick={() => window.open('/pin', '_blank')}
+                           onClick={() => window.open(`/session/${session.id}`, '_blank')}
                            className="session-pin-btn"
                          >
                            PIN: {session.pin}
