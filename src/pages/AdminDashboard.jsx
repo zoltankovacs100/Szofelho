@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, getDocs } from "firebase/firestore";
-import StylePicker from '../components/StylePicker'; // Komponens importálása
+import StylePicker from '../components/StylePicker';
+import FontPicker from '../components/FontPicker';
 import QRCodeGenerator from '../components/QRCodeGenerator';
 
 const AdminDashboard = () => {
@@ -83,50 +84,96 @@ const AdminDashboard = () => {
   // KIJELENTKEZÉS FÜGGVÉNY ELTÁVOLÍTVA - JELSZÓ VÉDETTSÉG KIKAPCSOLVA
 
   return (
-    <div className="card">
-      <h2>Admin Felület</h2>
-      {/* KIJELENTKEZÉS GOMB ELTÁVOLÍTVA - JELSZÓ VÉDETTSÉG KIKAPCSOLVA */}
-      
-      <h3>Új munkamenet</h3>
-      <form onSubmit={createSession}>
-          <input 
-            type="text"
-            value={newTopic}
-            onChange={(e) => setNewTopic(e.target.value)}
-            placeholder="Téma vagy kérdés a szófelhőhöz"
-            required
-          />
-          <button type="submit">Új munkamenet létrehozása PIN-kóddal</button>
-      </form>
+    <div className="admin-dashboard">
+      <header className="admin-header">
+        <div className="admin-header-content">
+          <h1 className="admin-title">Vista Appstore</h1>
+          <p className="admin-subtitle">Szófelhő Admin Felület</p>
+        </div>
+      </header>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <main className="admin-main">
+        <section className="admin-section">
+          <div className="section-header">
+            <h2>Új munkamenet létrehozása</h2>
+            <p>Hozz létre egy új szófelhő munkamenetet PIN-kóddal</p>
+          </div>
+          
+          <form onSubmit={createSession} className="create-session-form">
+            <div className="form-group">
+              <input 
+                type="text"
+                value={newTopic}
+                onChange={(e) => setNewTopic(e.target.value)}
+                placeholder="Téma vagy kérdés a szófelhőhöz"
+                required
+                className="form-input"
+              />
+            </div>
+            <button type="submit" className="btn btn-primary">
+              <span className="btn-icon">+</span>
+              Új munkamenet létrehozása
+            </button>
+          </form>
 
-      <h3>Aktív munkamenetek</h3>
-      {sessions.length > 0 ? (
-        <ul>
-          {sessions.map(session => (
-            <li key={session.id} style={{alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px', flexDirection: 'column'}}>
-                <div style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
-                    <button className="logout" style={{padding: '5px 10px'}} onClick={() => deleteSession(session.id)}>Törlés</button>
-                    <div style={{textAlign: 'right'}}>
-                        <strong>PIN: {session.pin}</strong>
-                        <button onClick={() => copyDirectLink(session.id)} style={{padding: '5px 10px', fontSize: '0.9rem', marginLeft: '10px'}}>
-                            {copiedSessionId === session.id ? 'Másolva!' : 'Link másolása'}
-                        </button>
-                        <QRCodeGenerator sessionUrl={`${window.location.origin}/session/${session.id}`} />
+          {error && <div className="error-message">{error}</div>}
+        </section>
+
+        <section className="admin-section">
+          <div className="section-header">
+            <h2>Aktív munkamenetek</h2>
+            <p>Kezeld a meglévő szófelhő munkameneteket</p>
+          </div>
+          
+          {sessions.length > 0 ? (
+            <div className="sessions-grid">
+              {sessions.map(session => (
+                <div key={session.id} className="session-card">
+                  <div className="session-header">
+                    <div className="session-info">
+                      <h3 className="session-topic">{session.topic}</h3>
+                      <div className="session-meta">
+                        <span className="session-pin">PIN: {session.pin}</span>
+                        <span className="session-date">
+                          {new Date(session.createdAt.seconds * 1000).toLocaleDateString('hu-HU')}
+                        </span>
+                      </div>
                     </div>
+                    <div className="session-actions">
+                      <button 
+                        onClick={() => copyDirectLink(session.id)} 
+                        className="btn btn-secondary btn-sm"
+                      >
+                        {copiedSessionId === session.id ? '✓ Másolva!' : '🔗 Link másolása'}
+                      </button>
+                      <QRCodeGenerator sessionUrl={`${window.location.origin}/session/${session.id}`} />
+                      <button 
+                        onClick={() => deleteSession(session.id)} 
+                        className="btn btn-danger btn-sm"
+                      >
+                        🗑️ Törlés
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="session-settings">
+                    <div className="settings-row">
+                      <StylePicker sessionId={session.id} currentStyleId={session.styleId} />
+                      <FontPicker sessionId={session.id} currentFont={session.fontFamily || 'Montserrat'} />
+                    </div>
+                  </div>
                 </div>
-                <div style={{width: '100%', textAlign: 'left', marginTop: '10px'}}>
-                    <strong>Téma:</strong> {session.topic}<br/>
-                    <small>Létrehozva: {new Date(session.createdAt.seconds * 1000).toLocaleString()}</small>
-                </div>
-                <StylePicker sessionId={session.id} currentStyleId={session.styleId} />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>Nincsenek aktív munkamenetek.</p>
-      )}
+              ))}
+            </div>
+          ) : (
+            <div className="empty-state">
+              <div className="empty-icon">📊</div>
+              <h3>Nincsenek aktív munkamenetek</h3>
+              <p>Hozz létre egy új munkamenetet a fenti űrlappal</p>
+            </div>
+          )}
+        </section>
+      </main>
     </div>
   );
 };
