@@ -8,6 +8,7 @@ import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import GuestLogin from './pages/GuestLogin';
 import WordCloud from './pages/WordCloud';
+import PinRedirect from './pages/PinRedirect';
 import './style.css';
 
 const ProtectedRoute = ({ user, children }) => {
@@ -41,6 +42,7 @@ const App = () => {
         <Route path="/" element={<Navigate to="/admin/dashboard" />} />
         <Route path="/session/:sessionId" element={<WordCloud />} />
         <Route path="/pin" element={<GuestLogin />} />
+        <Route path="/:pin" element={<PinRedirect />} />
 
         {/* Admin Routes - JELSZÓ VÉDETTSÉG KIKAPCSOLVA */}
         <Route path="/admin/login" element={<Navigate to="/admin/dashboard" />} />

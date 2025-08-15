@@ -133,12 +133,12 @@ const AdminDashboard = () => {
                     <div className="session-info">
                       <h3 className="session-topic">{session.topic}</h3>
                                              <div className="session-meta">
-                         <button 
-                           onClick={() => window.open(`/session/${session.id}`, '_blank')}
-                           className="session-pin-btn"
-                         >
-                           PIN: {session.pin}
-                         </button>
+                                                   <button 
+                            onClick={() => window.open(`/session/${session.id}`, '_blank')}
+                            className="session-pin-btn"
+                          >
+                            {window.location.hostname}/{session.pin}
+                          </button>
                          <span className="session-date">
                            {new Date(session.createdAt.seconds * 1000).toLocaleDateString('hu-HU')}
                          </span>

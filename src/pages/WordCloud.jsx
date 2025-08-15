@@ -219,7 +219,7 @@ const WordCloud = () => {
               borderRadius: '8px',
               border: '2px solid rgba(255,255,255,0.2)'
             }}>
-              PIN Kód: {sessionData?.pin || '______'}
+              {window.location.hostname}/{sessionData?.pin || '______'}
             </span>
             <span style={{ color: activeStyle.textColor, textShadow, fontSize: '1rem' }}>
               Írj be szavakat, és kattints a Beküldés gombra!
