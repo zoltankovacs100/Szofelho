@@ -1,82 +1,6 @@
-/* Lokális betűtípusok - Offline környezethez */
+/* Szófelhő App - Egyedi betűtípusok */
 
-/* 1. Montserrat - Modern, tiszta */
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/fonts/Montserrat-Regular.woff2') format('woff2'),
-       url('/fonts/Montserrat-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/fonts/Montserrat-Bold.woff2') format('woff2'),
-       url('/fonts/Montserrat-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* 2. Roboto - Google stílusú */
-@font-face {
-  font-family: 'Roboto';
-  src: url('/fonts/Roboto-Regular.woff2') format('woff2'),
-       url('/fonts/Roboto-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('/fonts/Roboto-Bold.woff2') format('woff2'),
-       url('/fonts/Roboto-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* 3. Open Sans - Olvasható, barátságos */
-@font-face {
-  font-family: 'Open Sans';
-  src: url('/fonts/OpenSans-Regular.woff2') format('woff2'),
-       url('/fonts/OpenSans-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Open Sans';
-  src: url('/fonts/OpenSans-Bold.woff2') format('woff2'),
-       url('/fonts/OpenSans-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* 4. Lato - Modern, kifinomult */
-@font-face {
-  font-family: 'Lato';
-  src: url('/fonts/Lato-Regular.woff2') format('woff2'),
-       url('/fonts/Lato-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Lato';
-  src: url('/fonts/Lato-Bold.woff2') format('woff2'),
-       url('/fonts/Lato-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* 5. Poppins - Geometrikus, modern */
+/* Poppins */
 @font-face {
   font-family: 'Poppins';
   src: url('/fonts/Poppins-Regular.woff2') format('woff2'),
@@ -85,36 +9,16 @@
   font-style: normal;
   font-display: swap;
 }
-
 @font-face {
   font-family: 'Poppins';
   src: url('/fonts/Poppins-Bold.woff2') format('woff2'),
        url('/fonts/Poppins-Bold.woff') format('woff');
   font-weight: 700;
-  font-style: normal;
+  font-style: bold;
   font-display: swap;
 }
 
-/* 6. Inter - Kódoló-barát */
-@font-face {
-  font-family: 'Inter';
-  src: url('/fonts/Inter-Regular.woff2') format('woff2'),
-       url('/fonts/Inter-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Inter';
-  src: url('/fonts/Inter-Bold.woff2') format('woff2'),
-       url('/fonts/Inter-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* 7. Nunito - Kerek, barátságos */
+/* Nunito */
 @font-face {
   font-family: 'Nunito';
   src: url('/fonts/Nunito-Regular.woff2') format('woff2'),
@@ -124,35 +28,27 @@
   font-display: swap;
 }
 
+/* Lato */
 @font-face {
-  font-family: 'Nunito';
-  src: url('/fonts/Nunito-Bold.woff2') format('woff2'),
-       url('/fonts/Nunito-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* 8. Source Sans Pro - Professzionális */
-@font-face {
-  font-family: 'Source Sans Pro';
-  src: url('/fonts/SourceSansPro-Regular.woff2') format('woff2'),
-       url('/fonts/SourceSansPro-Regular.woff') format('woff');
+  font-family: 'Lato';
+  src: url('/fonts/Lato-Regular.woff2') format('woff2'),
+       url('/fonts/Lato-Regular.woff') format('woff');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
+/* Inter */
 @font-face {
-  font-family: 'Source Sans Pro';
-  src: url('/fonts/SourceSansPro-Bold.woff2') format('woff2'),
-       url('/fonts/SourceSansPro-Bold.woff') format('woff');
-  font-weight: 700;
+  font-family: 'Inter';
+  src: url('/fonts/Inter-Regular.woff2') format('woff2'),
+       url('/fonts/Inter-Regular.woff') format('woff');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
-/* 9. Ubuntu - Linux stílusú */
+/* Ubuntu */
 @font-face {
   font-family: 'Ubuntu';
   src: url('/fonts/Ubuntu-Regular.woff2') format('woff2'),
@@ -162,70 +58,72 @@
   font-display: swap;
 }
 
+/* Source Sans 3 */
 @font-face {
-  font-family: 'Ubuntu';
-  src: url('/fonts/Ubuntu-Bold.woff2') format('woff2'),
-       url('/fonts/Ubuntu-Bold.woff') format('woff');
-  font-weight: 700;
+  font-family: 'Source Sans 3';
+  src: url('/fonts/SourceSans3-Roman.woff2') format('woff2'),
+       url('/fonts/SourceSans3-Roman.woff') format('woff');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
-/* Custom Fonts for Word Cloud Styles */
+/* Roboto */
+@font-face {
+  font-family: 'Roboto';
+  src: url('/fonts/Roboto-Regular.woff2') format('woff2'),
+       url('/fonts/Roboto-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
-/* 2) Bungee – Regular 400 */
+/* Open Sans */
+@font-face {
+  font-family: 'Open Sans';
+  src: url('/fonts/OpenSans-Regular.woff2') format('woff2'),
+       url('/fonts/OpenSans-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Bungee */
 @font-face {
   font-family: "Bungee";
-  src: url("/fonts/Bungee/Bungee-Regular.woff2") format("woff2"),
-       url("/fonts/Bungee/Bungee-Regular.woff") format("woff");
+  src: url("/fonts/Bungee-Regular.woff2") format("woff2"),
+       url("/fonts/Bungee-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
-/* 4) Monoton – Regular 400 */
+/* Monoton */
 @font-face {
   font-family: "Monoton";
-  src: url("/fonts/Monoton/Monoton-Regular.woff2") format("woff2"),
-       url("/fonts/Monoton/Monoton-Regular.woff") format("woff");
+  src: url("/fonts/Monoton-Regular.woff2") format("woff2"),
+       url("/fonts/Monoton-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
-/* 5) Rubik Glitch – Regular 400 */
+/* Rubik Glitch */
 @font-face {
   font-family: "Rubik Glitch";
-  src: url("/fonts/RubikGlitch/RubikGlitch-Regular.woff2") format("woff2"),
-       url("/fonts/RubikGlitch/RubikGlitch-Regular.woff") format("woff");
+  src: url("/fonts/RubikGlitch-Regular.woff2") format("woff2"),
+       url("/fonts/RubikGlitch-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
-/* 8) Creepster – Regular 400 */
+/* Creepster */
 @font-face {
   font-family: "Creepster";
-  src: url("/fonts/Creepster/Creepster-Regular.woff2") format("woff2"),
-       url("/fonts/Creepster/Creepster-Regular.woff") format("woff");
+  src: url("/fonts/Creepster-Regular.woff2") format("woff2"),
+       url("/fonts/Creepster-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-}
-
-/* Font utility classes for word cloud styles */
-.wc-bungee {
-  font-family: "Bungee", system-ui, sans-serif;
-}
-
-.wc-monoton {
-  font-family: "Monoton", system-ui, sans-serif;
-}
-
-.wc-glitch {
-  font-family: "Rubik Glitch", system-ui, sans-serif;
-}
-
-.wc-creep {
-  font-family: "Creepster", system-ui, sans-serif;
 }

@@ -7,18 +7,20 @@ const FontPicker = ({ sessionId, currentFont = 'Montserrat' }) => {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const availableFonts = [
-    { value: 'Montserrat', label: 'Montserrat - Modern' },
-    { value: 'Roboto', label: 'Roboto - Clean' },
-    { value: 'Open Sans', label: 'Open Sans - Friendly' },
-    { value: 'Lato', label: 'Lato - Elegant' },
-    { value: 'Poppins', label: 'Poppins - Geometric' },
+    { value: 'Poppins', label: 'Poppins - Geometrikus' },
+    { value: 'Nunito', label: 'Nunito - Kerekded' },
+    { value: 'Lato', label: 'Lato - Elegáns' },
     { value: 'Inter', label: 'Inter - Tech' },
-    { value: 'Nunito', label: 'Nunito - Rounded' },
-    { value: 'Source Sans Pro', label: 'Source Sans Pro - Professional' },
-    { value: 'Ubuntu', label: 'Ubuntu - Linux Style' },
-    { value: 'Impact', label: 'Impact - Classic' },
-    { value: 'Arial', label: 'Arial - System' },
-    { value: 'Helvetica', label: 'Helvetica - Clean' }
+    { value: 'Ubuntu', label: 'Ubuntu - Linux stílus' },
+    { value: 'Source Sans 3', label: 'Source Sans 3 - Profi' },
+    { value: 'Roboto', label: 'Roboto - Google stílus' },
+    { value: 'Open Sans', label: 'Open Sans - Barátságos' },
+    { value: 'Bungee', label: 'Bungee - Blokkos' },
+    { value: 'Monoton', label: 'Monoton - Neon' },
+    { value: 'Rubik Glitch', label: 'Rubik Glitch - Glitch' },
+    { value: 'Creepster', label: 'Creepster - Horror' },
+    { value: 'Impact', label: 'Impact - Klasszikus' },
+    { value: 'Arial', label: 'Arial - Rendszer' },
   ];
 
   useEffect(() => {
