@@ -21,6 +21,7 @@ const FontPicker = ({ sessionId, currentFont = 'Montserrat' }) => {
     { value: 'Creepster', label: 'Creepster - Horror' },
     { value: 'Impact', label: 'Impact - Klasszikus' },
     { value: 'Arial', label: 'Arial - Rendszer' },
+    { value: 'Helvetica', label: 'Helvetica - Tiszta' }
   ];
 
   useEffect(() => {

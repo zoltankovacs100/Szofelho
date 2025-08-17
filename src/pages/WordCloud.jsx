@@ -54,17 +54,10 @@ const WordCloud = () => {
     return () => clearInterval(intervalId);
   }, [sessionId]);
 
-  // Apply background style dynamically
-  useEffect(() => {
-    document.body.style.backgroundColor = activeStyle.background;
-    return () => {
-        document.body.style.backgroundColor = '#f0f2f5';
-    }
-  }, [activeStyle]);
-
-  // Poll for words every second
+  // Poll for words every second, but only update if words have changed
   useEffect(() => {
     if (!sessionId) return;
+    let isMounted = true;
     const fetchWords = async () => {
       const wordsRef = collection(db, 'sessions', sessionId, 'words');
       const snapshot = await getDocs(query(wordsRef));
@@ -73,19 +66,35 @@ const WordCloud = () => {
         acc[text] = (acc[text] || 0) + 1;
         return acc;
       }, {});
+      // Increase base font size and scale less aggressively
       const formattedWords = Object.entries(wordCounts).map(([text, value]) => ({
-        text, value: value * 15,
+        text, value: 13 + ((value - 1) * 5),
       }));
-      setWords(formattedWords);
+      if (isMounted) {
+        setWords(currentWords => {
+          // Only update state if the generated words array is different
+          if (JSON.stringify(currentWords) !== JSON.stringify(formattedWords)) {
+            return formattedWords;
+          }
+          return currentWords;
+        });
+      }
     };
     fetchWords();
     const intervalId = setInterval(fetchWords, 1000);
-    return () => clearInterval(intervalId);
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
   }, [sessionId]);
 
   // Generate layout
   useEffect(() => {
-    if (words.length === 0 || !cloudContainerRef.current) return;
+    if (words.length === 0 || !cloudContainerRef.current) {
+        // Clear layout if there are no words
+        setLayoutWords([]);
+        return;
+    };
     const containerWidth = cloudContainerRef.current.offsetWidth;
     const containerHeight = cloudContainerRef.current.offsetHeight;
     cloud()

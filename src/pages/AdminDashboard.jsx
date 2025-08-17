@@ -21,7 +21,14 @@ const AdminDashboard = () => {
       snapshot.docs.forEach((d) => {
         sessionsData.push({ id: d.id, ...d.data() });
       });
-      if (isMounted) setSessions(sessionsData);
+      if (isMounted) {
+        setSessions(currentSessions => {
+          if (JSON.stringify(currentSessions) !== JSON.stringify(sessionsData)) {
+            return sessionsData;
+          }
+          return currentSessions;
+        });
+      }
     };
     fetchSessions();
     const intervalId = setInterval(fetchSessions, 1000);
