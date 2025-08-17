@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { db, auth } from '../localDb';
-import { onAuthStateChanged, collection, addDoc, onSnapshot, query, serverTimestamp, doc } from '../localDb';
+import { onAuthStateChanged, collection, addDoc, onSnapshot, query, serverTimestamp, doc, getDocs } from '../localDb';
 import cloud from 'd3-cloud';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -37,18 +37,21 @@ const WordCloud = () => {
     setShowQRCode(shouldShowQR === 'true');
   }, [sessionId]);
   
-  // Fetch session data
+  // Poll for session data every second
   useEffect(() => {
     if (!sessionId) return;
-    const sessionDocRef = doc(db, 'sessions', sessionId);
-    const unsubscribe = onSnapshot(sessionDocRef, (doc) => {
-        if (doc.exists()) {
-            setSessionData(doc.data());
-        } else {
-            setError("A munkamenet nem található.");
-        }
-    });
-    return () => unsubscribe();
+    const fetchSession = async () => {
+      const sessionsSnapshot = await getDocs(query(collection(db, 'sessions')));
+      const found = sessionsSnapshot.docs.find(d => d.id === sessionId);
+      if (found) {
+        setSessionData(found.data());
+      } else {
+        setError("A munkamenet nem található.");
+      }
+    };
+    fetchSession();
+    const intervalId = setInterval(fetchSession, 1000);
+    return () => clearInterval(intervalId);
   }, [sessionId]);
 
   // Apply background style dynamically
@@ -59,12 +62,12 @@ const WordCloud = () => {
     }
   }, [activeStyle]);
 
-  // Fetch words
+  // Poll for words every second
   useEffect(() => {
     if (!sessionId) return;
-    const wordsRef = collection(db, 'sessions', sessionId, 'words');
-    const q = query(wordsRef);
-    const unsubscribe = onSnapshot(q, (snapshot) => {
+    const fetchWords = async () => {
+      const wordsRef = collection(db, 'sessions', sessionId, 'words');
+      const snapshot = await getDocs(query(wordsRef));
       const wordCounts = snapshot.docs.reduce((acc, doc) => {
         const text = doc.data().text;
         acc[text] = (acc[text] || 0) + 1;
@@ -74,8 +77,10 @@ const WordCloud = () => {
         text, value: value * 15,
       }));
       setWords(formattedWords);
-    });
-    return () => unsubscribe();
+    };
+    fetchWords();
+    const intervalId = setInterval(fetchWords, 1000);
+    return () => clearInterval(intervalId);
   }, [sessionId]);
 
   // Generate layout
@@ -230,7 +235,13 @@ const WordCloud = () => {
       {showQRCode && <QRCodeDisplay sessionUrl={window.location.href} />}
       
       <form onSubmit={handleWordSubmit}>
-        <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Pl. innováció, csapatmunka..."/>
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Pl. innováció, csapatmunka..."
+          style={{ width: '100%', padding: '12px', border: '1px solid #dddfe2', borderRadius: '6px', boxSizing: 'border-box', backgroundColor: '#fff', color: '#000' }}
+        />
         <button type="submit">Beküldés</button>
       </form>
       {error && <p style={{ color: 'red' }}>{error}</p>}

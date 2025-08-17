@@ -11,19 +11,21 @@ const AdminDashboard = () => {
   const [error, setError] = useState(null);
   const [copiedSessionId, setCopiedSessionId] = useState(null);
 
+  // Poll sessions list every second
   useEffect(() => {
-    const q = query(collection(db, "sessions"), orderBy("createdAt", "desc"));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    let isMounted = true;
+    const fetchSessions = async () => {
+      const q = query(collection(db, "sessions"), orderBy("createdAt", "desc"));
+      const snapshot = await getDocs(q);
       const sessionsData = [];
-      querySnapshot.forEach((doc) => {
-        sessionsData.push({ id: doc.id, ...doc.data() });
+      snapshot.docs.forEach((d) => {
+        sessionsData.push({ id: d.id, ...d.data() });
       });
-      setSessions(sessionsData);
-    }, (err) => {
-      console.error("Hiba a munkamenetek lekérésekor: ", err);
-      setError("Nem sikerült lekérni a munkameneteket.");
-    });
-    return () => unsubscribe();
+      if (isMounted) setSessions(sessionsData);
+    };
+    fetchSessions();
+    const intervalId = setInterval(fetchSessions, 1000);
+    return () => { isMounted = false; clearInterval(intervalId); };
   }, []);
 
   const createSession = async (e) => {
