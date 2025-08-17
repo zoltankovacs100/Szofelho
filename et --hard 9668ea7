@@ -1,0 +1,10 @@
+[33mb2bcb06[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m feat: Remove Firebase dependency and implement local mock database
+[33m5b88b70[m fix(auth): Implement anonymous sign-in to satisfy Firestore rules
+[33mca8abf7[m feat(firestore): Secure firestore rules for session handling
+[33mfaee98e[m chore: Align project with new build strategy
+[33m9668ea7[m feat: Add PIN-based URL navigation with automatic redirect - 2025.08.14 11:30
+[33m1a0ae5b[m feat: Display PIN code directly on word cloud page - 2025.08.14 11:30
+[33m66ff4a0[m feat: Restore PIN code functionality with improved UI - 2025.08.14 11:30
+[33md1c95ca[m feat: Redesign admin dashboard with font picker and Vista branding - 2025.08.14 11:30
+[33m3a63b2e[m feat: Add 9 new font styles with local font support - 2025.08.14 11:30
+[33m6b366bb[m feat: Add new Montserrat Modern style with improved WordCloud component - 2025.08.14 11:30
