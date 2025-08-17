@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { db } from '../firebase';
-import { collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, getDocs } from "firebase/firestore";
+import { db } from '../localDb';
+import { collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, getDocs } from "../localDb";
 import StylePicker from '../components/StylePicker';
 import FontPicker from '../components/FontPicker';
 import QRCodeGenerator from '../components/QRCodeGenerator';
@@ -38,7 +38,7 @@ const AdminDashboard = () => {
       await addDoc(collection(db, "sessions"), {
         pin: pin,
         topic: newTopic,
-        createdAt: new Date(),
+        createdAt: { seconds: Math.floor(Date.now() / 1000) },
         status: 'active',
         styleId: 'style-1' // Alapértelmezett stílus
       });

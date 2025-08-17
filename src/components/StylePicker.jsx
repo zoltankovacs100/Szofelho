@@ -1,7 +1,7 @@
 // src/components/StylePicker.jsx
 import React from 'react';
-import { db } from '../firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../localDb';
+import { doc, updateDoc } from '../localDb';
 import { stylePresets } from '../styles';
 
 const StylePicker = ({ sessionId, currentStyleId }) => {

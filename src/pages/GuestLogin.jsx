@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { db } from '../firebase';
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from '../localDb';
+import { collection, query, where, getDocs } from "../localDb";
 
 const GuestLogin = () => {
   const [pin, setPin] = useState('');

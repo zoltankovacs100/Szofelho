@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { db, auth } from '../firebase';
-import { onAuthStateChanged } from 'firebase/auth';
-import { collection, addDoc, onSnapshot, query, serverTimestamp, doc } from 'firebase/firestore';
+import { db, auth } from '../localDb';
+import { onAuthStateChanged, collection, addDoc, onSnapshot, query, serverTimestamp, doc } from '../localDb';
 import cloud from 'd3-cloud';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';

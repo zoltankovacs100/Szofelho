@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import { doc, updateDoc } from '../localDb';
+import { db } from '../localDb';
 
 const FontPicker = ({ sessionId, currentFont = 'Montserrat' }) => {
   const [selectedFont, setSelectedFont] = useState(currentFont);
