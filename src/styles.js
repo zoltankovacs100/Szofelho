@@ -3,35 +3,39 @@
 export const stylePresets = {
   'style-1': {
     id: 'style-1',
-    name: 'Mélytenger',
+    name: 'Bungee',
     background: '#0p0c29',
     wordColors: ['#3498db', '#f1c40f', '#e74c3c', '#9b59b6', '#ecf0f1'],
     textColor: '#FFFFFF',
-    cardColor: 'rgba(0, 0, 0, 0.25)'
+    cardColor: 'rgba(0, 0, 0, 0.25)',
+    font: 'Bungee, system-ui, sans-serif'
   },
   'style-2': {
     id: 'style-2',
-    name: 'Napsugár',
+    name: 'Monoton',
     background: '#f1c40f',
     wordColors: ['#2c3e50', '#e74c3c', '#2980b9', '#27ae60', '#ffffff'],
     textColor: '#2c3e50',
-    cardColor: 'rgba(255, 255, 255, 0.3)'
+    cardColor: 'rgba(255, 255, 255, 0.3)',
+    font: 'Monoton, system-ui, sans-serif'
   },
   'style-3': {
     id: 'style-3',
-    name: 'Sötét elegancia',
+    name: 'Rubik Glitch',
     background: '#2c3e50',
     wordColors: ['#1abc9c', '#f39c12', '#d35400', '#ecf0f1', '#3498db'],
     textColor: '#FFFFFF',
-    cardColor: 'rgba(0, 0, 0, 0.2)'
+    cardColor: 'rgba(0, 0, 0, 0.2)',
+    font: 'Rubik Glitch, system-ui, sans-serif'
   },
   'style-4': {
     id: 'style-4',
-    name: 'Pasztell álom',
+    name: 'Creepster',
     background: '#ecf0f1',
     wordColors: ['#9b59b6', '#34495e', '#16a085', '#2980b9', '#e67e22'],
     textColor: '#34495e',
-    cardColor: 'rgba(255, 255, 255, 0.5)'
+    cardColor: 'rgba(255, 255, 255, 0.5)',
+    font: 'Creepster, system-ui, sans-serif'
   },
   'style-5': {
     id: 'style-5',

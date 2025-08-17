@@ -10,6 +10,7 @@ import GuestLogin from './pages/GuestLogin';
 import WordCloud from './pages/WordCloud';
 import PinRedirect from './pages/PinRedirect';
 import './style.css';
+import './fonts.css';
 
 const ProtectedRoute = ({ user, children }) => {
   // JELSZÓ VÉDETTSÉG KIKAPCSOLVA - 2025.08.14 11:30

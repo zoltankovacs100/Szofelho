@@ -170,3 +170,62 @@
   font-style: normal;
   font-display: swap;
 }
+
+/* Custom Fonts for Word Cloud Styles */
+
+/* 2) Bungee – Regular 400 */
+@font-face {
+  font-family: "Bungee";
+  src: url("/fonts/Bungee/Bungee-Regular.woff2") format("woff2"),
+       url("/fonts/Bungee/Bungee-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 4) Monoton – Regular 400 */
+@font-face {
+  font-family: "Monoton";
+  src: url("/fonts/Monoton/Monoton-Regular.woff2") format("woff2"),
+       url("/fonts/Monoton/Monoton-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 5) Rubik Glitch – Regular 400 */
+@font-face {
+  font-family: "Rubik Glitch";
+  src: url("/fonts/RubikGlitch/RubikGlitch-Regular.woff2") format("woff2"),
+       url("/fonts/RubikGlitch/RubikGlitch-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 8) Creepster – Regular 400 */
+@font-face {
+  font-family: "Creepster";
+  src: url("/fonts/Creepster/Creepster-Regular.woff2") format("woff2"),
+       url("/fonts/Creepster/Creepster-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Font utility classes for word cloud styles */
+.wc-bungee {
+  font-family: "Bungee", system-ui, sans-serif;
+}
+
+.wc-monoton {
+  font-family: "Monoton", system-ui, sans-serif;
+}
+
+.wc-glitch {
+  font-family: "Rubik Glitch", system-ui, sans-serif;
+}
+
+.wc-creep {
+  font-family: "Creepster", system-ui, sans-serif;
+}
