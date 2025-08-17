@@ -137,9 +137,28 @@ export async function addDoc(collectionRef, data) {
 
 export async function getDocs(queryRef) {
   const data = loadData();
+
+  if (queryRef.collection && queryRef.collection.startsWith('sessions/')) {
+    const sessionId = queryRef.collection.split('/')[1];
+    const words = data.words[sessionId] || [];
+    const docs = words.map(word => ({
+      id: word.id,
+      data: () => word
+    }));
+    return { docs, empty: docs.length === 0, forEach: (cb) => docs.forEach(cb) };
+  }
   
   if (queryRef.collection === 'sessions') {
-    const sessions = Object.values(data.sessions || {});
+    let sessions = Object.values(data.sessions || {});
+
+    if (queryRef.constraints) {
+      queryRef.constraints.forEach(constraint => {
+        if (constraint.field === 'createdAt' && constraint.direction === 'desc') {
+          sessions.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
+        }
+      });
+    }
+
     const docs = sessions.map(session => ({
       id: session.id,
       data: () => session
