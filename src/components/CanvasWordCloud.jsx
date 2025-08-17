@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-const CanvasWordCloud = ({ words, style, containerRef }) => {
+const CanvasWordCloud = ({ words, style, containerRef, fontFamily }) => {
   const canvasRef = useRef(null);
   const [placed, setPlaced] = useState([]);
   const [rects, setRects] = useState([]);
@@ -8,14 +8,14 @@ const CanvasWordCloud = ({ words, style, containerRef }) => {
   // Konfiguráció a "vadvirág" stílushoz igazítva
   const CONFIG = {
     background: style.background,
-    fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+    fontFamily: fontFamily || style.font || 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     palette: style.wordColors,
     rotations: [0, 0, 0, 0, -10*Math.PI/180, 10*Math.PI/180, -20*Math.PI/180, 20*Math.PI/180],
-    baseFontPx: 18,
-    maxFontPx: 110,
-    padding: 3,
-    spiralStep: 3,
-    iterationsPerWord: 3000,
+    baseFontPx: style.baseFontPx || 18,
+    maxFontPx: style.maxFontPx || 110,
+    padding: style.padding || 3,
+    spiralStep: style.spiralStep || 3,
+    iterationsPerWord: style.iterationsPerWord || 3000,
     hoverHighlight: true,
     clickable: true,
     responsive: true
@@ -28,7 +28,7 @@ const CanvasWordCloud = ({ words, style, containerRef }) => {
 
   const weightToFont = (weight, minW, maxW) => {
     const clamped = Math.max(minW, Math.min(maxW, weight));
-    const t = (clamped - minW) / (maxW - minW || 1);
+    const t = (clamped - minW) / (maxWeight - minWeight || 1);
     return Math.round(CONFIG.baseFontPx + t * (CONFIG.maxFontPx - CONFIG.baseFontPx));
   };
 
@@ -201,29 +201,10 @@ const CanvasWordCloud = ({ words, style, containerRef }) => {
     };
   };
 
+  // DPI és méretezés / interakciók változatlanok
   useEffect(() => {
     drawAll();
-    const cleanup = addInteractions();
-
-    if (CONFIG.responsive) {
-      let timeout;
-      const handleResize = () => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          drawAll();
-        }, 120);
-      };
-
-      window.addEventListener('resize', handleResize);
-      return () => {
-        cleanup();
-        window.removeEventListener('resize', handleResize);
-        clearTimeout(timeout);
-      };
-    }
-
-    return cleanup;
-  }, [words, style]);
+  }, [words, style, fontFamily]);
 
   return (
     <canvas

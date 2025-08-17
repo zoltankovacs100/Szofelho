@@ -249,7 +249,7 @@ const WordCloud = () => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Pl. innováció, csapatmunka..."
-          style={{ width: '100%', padding: '12px', border: '1px solid #dddfe2', borderRadius: '6px', boxSizing: 'border-box', backgroundColor: '#fff', color: '#000' }}
+          style={{ width: '100%', padding: '12px', border: '1px solid #dddfe2', borderRadius: '6px', boxSizing: 'border-box', backgroundColor: '#fff', color: '#000', fontSize: '13px' }}
         />
         <button type="submit">Beküldés</button>
       </form>
@@ -275,6 +275,7 @@ const WordCloud = () => {
             words={words} 
             style={activeStyle} 
             containerRef={cloudContainerRef}
+            fontFamily={sessionData?.fontFamily || activeStyle.font}
           />
         ) : (
           <svg width={cloudContainerRef.current?.offsetWidth} height={cloudContainerRef.current?.offsetHeight}>
