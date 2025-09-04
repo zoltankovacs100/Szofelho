@@ -142,6 +142,9 @@ const WordCloud = () => {
     }
   }, [words, activeSchema]);
 
+  // Stabil pozíciók tárolása szavanként
+  const [wordPositions, setWordPositions] = useState(new Map());
+
   const generateSimpleWordCloud = () => {
     const container = cloudContainerRef.current;
     if (!container) return;
@@ -167,12 +170,21 @@ const WordCloud = () => {
         text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
       `;
       
-      // Simple random positioning (improved collision detection would be better)
-      const x = Math.random() * (containerWidth - word.text.length * word.size * 0.6);
-      const y = Math.random() * (containerHeight - word.size);
+      // Ellenőrizzük, hogy van-e már mentett pozíció erre a szóra
+      let position = wordPositions.get(word.text);
       
-      wordElement.style.left = x + 'px';
-      wordElement.style.top = y + 'px';
+      if (!position) {
+        // Új szó esetén generálunk új pozíciót
+        const x = Math.random() * (containerWidth - word.text.length * word.size * 0.6);
+        const y = Math.random() * (containerHeight - word.size);
+        position = { x, y };
+        
+        // Mentjük az új pozíciót
+        setWordPositions(prev => new Map(prev).set(word.text, position));
+      }
+      
+      wordElement.style.left = position.x + 'px';
+      wordElement.style.top = position.y + 'px';
       
       // Hover effect
       wordElement.addEventListener('mouseenter', () => {

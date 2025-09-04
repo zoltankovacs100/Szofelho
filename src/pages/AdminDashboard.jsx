@@ -61,20 +61,27 @@ const AdminDashboard = () => {
   const deleteSession = async (sessionId) => {
     if (window.confirm("Valóban törölni akarod ezt a munkamenetet és az összes hozzá tartozó szót?")) {
         try {
-            const wordsQuery = query(collection(db, `sessions/${sessionId}/words`));
-            const wordsSnapshot = await getDocs(wordsQuery);
+            // Először töröljük az összes szót a sessions/{sessionId}/words kollekcióból
+            const wordsRef = collection(db, 'sessions', sessionId, 'words');
+            const wordsSnapshot = await getDocs(wordsRef);
             const deletePromises = [];
-            wordsSnapshot.forEach((wordDoc) => {
+            
+            wordsSnapshot.docs.forEach((wordDoc) => {
                 deletePromises.push(deleteDoc(wordDoc.ref));
             });
+            
+            // Várjuk meg, hogy az összes szó törlésre kerüljön
             await Promise.all(deletePromises);
 
+            // Ezután töröljük a munkamenetet
             const sessionDocRef = doc(db, "sessions", sessionId);
             await deleteDoc(sessionDocRef);
             
+            console.log(`Munkamenet ${sessionId} és ${wordsSnapshot.docs.length} szó sikeresen törölve.`);
+            
         } catch (err) {
             console.error("Hiba a törlés során: ", err);
-            setError("A munkamenet törlése sikertelen.");
+            setError(`A munkamenet törlése sikertelen: ${err.message}`);
         }
     }
   };

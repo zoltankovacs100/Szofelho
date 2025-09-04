@@ -11,27 +11,33 @@ const PinRedirect = () => {
 
   useEffect(() => {
     const findSessionByPin = async () => {
-      if (!pin || pin.length !== 6) {
-        setError('Érvénytelen PIN kód.');
+      // Ellenőrizzük a PIN érvényességét - 6 számjegy
+      if (!pin || !/^\d{6}$/.test(pin)) {
+        setError('Érvénytelen PIN kód. A PIN-nek 6 számjegyből kell állnia.');
         setLoading(false);
         return;
       }
 
       try {
+        console.log('PIN keresés:', pin);
         const sessionsRef = collection(db, 'sessions');
         const q = query(sessionsRef, where('pin', '==', pin));
         const querySnapshot = await getDocs(q);
 
+        console.log('Talált munkamenetek száma:', querySnapshot.docs.length);
+
         if (querySnapshot.empty) {
-          setError('A megadott PIN kódhoz nem található munkamenet.');
+          setError(`A PIN kód (${pin}) nem található. Ellenőrizd, hogy helyes-e a kód, vagy kérd meg az admin-t, hogy ellenőrizze az aktív munkameneteket.`);
           setLoading(false);
         } else {
           const sessionDoc = querySnapshot.docs[0];
+          const sessionData = sessionDoc.data();
+          console.log('Megtalált munkamenet:', sessionData.topic, 'ID:', sessionDoc.id);
           navigate(`/session/${sessionDoc.id}`, { replace: true });
         }
       } catch (err) {
         console.error('Hiba a munkamenet keresésekor:', err);
-        setError('Hiba történt a munkamenet keresése során.');
+        setError(`Hiba történt a munkamenet keresése során: ${err.message}`);
         setLoading(false);
       }
     };
@@ -46,7 +52,7 @@ const PinRedirect = () => {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-        background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+        background: 'linear-gradient(135deg, #2d5016 0%, #1B4332 100%)',
         color: 'white',
         fontSize: '1.2rem'
       }}>
@@ -63,7 +69,7 @@ const PinRedirect = () => {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-        background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+        background: 'linear-gradient(135deg, #2d5016 0%, #1B4332 100%)',
         color: 'white',
         padding: '2rem',
         textAlign: 'center'
