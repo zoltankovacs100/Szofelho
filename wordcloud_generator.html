@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professzionális Szófelhő Generátor - 5 Séma</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            font-size: 3em;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .schema-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .schema-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        .schema-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .schema-card.active {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.25);
+        }
+
+        .schema-preview {
+            height: 120px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            font-size: 18px;
+        }
+
+        .schema1-preview {
+            background: linear-gradient(135deg, #8FBC8F 0%, #9ACD32 100%);
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        .schema2-preview {
+            background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+            font-family: 'Arial Black', Arial, sans-serif;
+            color: #FF6B35;
+        }
+
+        .schema3-preview {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            font-family: 'Times New Roman', serif;
+            color: #2F5233;
+        }
+
+        .schema4-preview {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+            font-family: 'Arial', sans-serif;
+            color: #1B4332;
+            border: 2px solid #ddd;
+        }
+
+        .schema5-preview {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            font-family: 'Verdana', sans-serif;
+            color: #4A90E2;
+            border: 2px solid #e9ecef;
+        }
+
+        .schema-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .schema-desc {
+            color: #7f8c8d;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .control-group {
+            background: rgba(248, 249, 250, 0.8);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        textarea, select, input[type="range"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea {
+            height: 120px;
+            resize: vertical;
+            font-family: 'Segoe UI', sans-serif;
+            line-height: 1.5;
+        }
+
+        textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input[type="range"] {
+            padding: 0;
+            height: 8px;
+            background: #e9ecef;
+            border: none;
+            border-radius: 4px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .slider-value {
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+            margin-top: 8px;
+            font-size: 18px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .wordcloud-container {
+            position: relative;
+            margin: 40px 0;
+            border-radius: 20px;
+            overflow: hidden;
+            min-height: 700px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.1);
+        }
+
+        /* Séma háttér stílusok */
+        .schema1 {
+            background: linear-gradient(135deg, #8FBC8F 0%, #9ACD32 50%, #90EE90 100%);
+        }
+
+        .schema2 {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #404040 100%);
+        }
+
+        .schema3 {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
+            border: 3px solid #adb5bd;
+        }
+
+        .schema4 {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%);
+            border: 3px solid #ced4da;
+        }
+
+        .schema5 {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 50%, #e6f3ff 100%);
+            border: 3px solid #b3d9ff;
+        }
+
+        .wordcloud {
+            position: relative;
+            width: 100%;
+            height: 700px;
+            overflow: hidden;
+        }
+
+        .word {
+            position: absolute;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            user-select: none;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            transform-origin: center center;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .word:hover {
+            transform: scale(1.15) !important;
+            z-index: 100;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+            filter: brightness(1.1);
+        }
+
+        /* Séma 1 - Zöld természetes */
+        .schema1 .word {
+            font-family: 'Comic Sans MS', 'Marker Felt', cursive, sans-serif;
+            font-weight: 900;
+        }
+        .schema1 .word.size-xl { color: #1B4332; font-size: clamp(45px, 5vw, 70px); }
+        .schema1 .word.size-l { color: #2D5016; font-size: clamp(35px, 4vw, 55px); }
+        .schema1 .word.size-m { color: #52B788; font-size: clamp(28px, 3vw, 40px); }
+        .schema1 .word.size-s { color: #74C69D; font-size: clamp(20px, 2vw, 30px); }
+        .schema1 .word.size-xs { color: #95D5B2; font-size: clamp(16px, 1.5vw, 24px); }
+
+        /* Séma 2 - Sötét modern */
+        .schema2 .word {
+            font-family: 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+            font-weight: 900;
+        }
+        .schema2 .word.size-xl { color: #FF4500; font-size: clamp(50px, 5.5vw, 75px); }
+        .schema2 .word.size-l { color: #FF6B35; font-size: clamp(38px, 4.2vw, 58px); }
+        .schema2 .word.size-m { color: #32CD32; font-size: clamp(30px, 3.2vw, 42px); }
+        .schema2 .word.size-s { color: #87CEEB; font-size: clamp(22px, 2.2vw, 32px); }
+        .schema2 .word.size-xs { color: #DDA0DD; font-size: clamp(17px, 1.6vw, 25px); }
+
+        /* Séma 3 - Világos elegáns */
+        .schema3 .word {
+            font-family: 'Times New Roman', 'Georgia', serif;
+            font-weight: 700;
+        }
+        .schema3 .word.size-xl { color: #1B4332; font-size: clamp(48px, 5.2vw, 72px); }
+        .schema3 .word.size-l { color: #2F5233; font-size: clamp(36px, 4vw, 56px); }
+        .schema3 .word.size-m { color: #40916C; font-size: clamp(28px, 3vw, 40px); }
+        .schema3 .word.size-s { color: #52B788; font-size: clamp(21px, 2.1vw, 30px); }
+        .schema3 .word.size-xs { color: #74C69D; font-size: clamp(16px, 1.5vw, 23px); }
+
+        /* Séma 4 - Professzionális */
+        .schema4 .word {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+        .schema4 .word.size-xl { color: #1B4332; font-size: clamp(46px, 5vw, 68px); }
+        .schema4 .word.size-l { color: #2F5233; font-size: clamp(34px, 3.8vw, 52px); }
+        .schema4 .word.size-m { color: #E76F51; font-size: clamp(27px, 2.8vw, 38px); }
+        .schema4 .word.size-s { color: #F4A261; font-size: clamp(20px, 2vw, 28px); }
+        .schema4 .word.size-xs { color: #E9C46A; font-size: clamp(15px, 1.4vw, 22px); }
+
+        /* Séma 5 - Színes oktatási */
+        .schema5 .word {
+            font-family: 'Verdana', 'Trebuchet MS', sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+        .schema5 .word.size-xl { color: #D73527; font-size: clamp(50px, 5.5vw, 75px); }
+        .schema5 .word.size-l { color: #E74C3C; font-size: clamp(38px, 4.2vw, 58px); }
+        .schema5 .word.size-m { color: #F39C12; font-size: clamp(30px, 3.2vw, 42px); }
+        .schema5 .word.size-s { color: #27AE60; font-size: clamp(23px, 2.3vw, 33px); }
+        .schema5 .word.size-xs { color: #3498DB; font-size: clamp(18px, 1.7vw, 26px); }
+
+        .progress-container {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .status {
+            text-align: center;
+            color: #495057;
+            margin: 15px 0;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .instructions {
+            background: linear-gradient(135deg, #e8f4f8 0%, #f0f8ff 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .instructions h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .instructions p {
+            margin: 10px 0;
+            color: #495057;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .algorithm-badge {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .schema-selector {
+                grid-template-columns: 1fr;
+            }
+            
+            .wordcloud {
+                height: 500px;
+            }
+        }
+
+        .canvas-debug {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Professzionális Szófelhő Generátor</h1>
+        
+        <div class="algorithm-badge">
+            ⚡ Wordle-stílusú spirális algoritmus
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Használati útmutató</h3>
+            <p><strong>1.</strong> Válassz egy vizuális sémát az alábbi kártyákból</p>
+            <p><strong>2.</strong> Írd be a szavakat vesszővel elválasztva (space nem kötelező)</p>
+            <p><strong>3.</strong> Állítsd be a spirál típusát és a maximum szavak számát</p>
+            <p><strong>4.</strong> Kattints a "Szófelhő Létrehozása" gombra</p>
+            <p><strong>💡 Tipp:</strong> Ismételd meg a fontosabb szavakat többször a nagyobb méretért!</p>
+        </div>
+
+        <div class="schema-selector" id="schemaSelector">
+            <div class="schema-card active" data-schema="schema1">
+                <div class="schema-preview schema1-preview">
+                    learning education
+                </div>
+                <div class="schema-title">1. Zöld Természetes</div>
+                <div class="schema-desc">Barátságos, organikus megjelenés Comic Sans betűtípussal és természetes zöld árnyalatokkal</div>
+            </div>
+
+            <div class="schema-card" data-schema="schema2">
+                <div class="schema-preview schema2-preview">
+                    TEACHERS STUDENTS
+                </div>
+                <div class="schema-title">2. Sötét Modern</div>
+                <div class="schema-desc">Elegáns sötét háttér Arial Black betűtípussal és vibráló színekkel</div>
+            </div>
+
+            <div class="schema-card" data-schema="schema3">
+                <div class="schema-preview schema3-preview">
+                    Common Core Standards
+                </div>
+                <div class="schema-title">3. Világos Elegáns</div>
+                <div class="schema-desc">Tiszta, professzionális megjelenés Times New Roman betűtípussal</div>
+            </div>
+
+            <div class="schema-card" data-schema="schema4">
+                <div class="schema-preview schema4-preview">
+                    MATHEMATICS EDUCATION
+                </div>
+                <div class="schema-title">4. Professzionális</div>
+                <div class="schema-desc">Üzleti stílus Arial betűtípussal és egyszerű színpalettal</div>
+            </div>
+
+            <div class="schema-card" data-schema="schema5">
+                <div class="schema-preview schema5-preview">
+                    development resources
+                </div>
+                <div class="schema-title">5. Színes Oktatási</div>
+                <div class="schema-desc">Élénk, inspiráló színek Verdana betűtípussal az oktatási környezethez</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="words">📝 Szavak (vesszővel elválasztva)</label>
+                <textarea id="words" placeholder="tanulás,oktatás,iskola,tanárok,diákok,tudás,fejlesztés,kreativitás,innováció,technológia,módszertan,értékelés"></textarea>
+            </div>
+
+            <div class="control-group">
+                <label for="spiral">🌀 Spirál típus</label>
+                <select id="spiral">
+                    <option value="archimedean">Archimédeszi spirál</option>
+                    <option value="rectangular">Négyszögletes spirál</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="maxWords">📊 Maximum szavak</label>
+                <input type="range" id="maxWords" min="20" max="150" value="80">
+                <div class="slider-value" id="maxWordsValue">80</div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button onclick="generateWordCloud()">✨ Szófelhő Létrehozása</button>
+            <button onclick="loadPreset()">📋 Minta Betöltése</button>
+            <button onclick="regenerate()">🔄 Újragenerálás</button>
+        </div>
+
+        <div class="progress-container" id="progressContainer" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="status" id="status"></div>
+        </div>
+
+        <div class="wordcloud-container schema1" id="wordcloud-container">
+            <div class="wordcloud" id="wordcloud">
+                <div style="text-align: center; color: rgba(0,0,0,0.6); font-size: 28px; padding: 80px 40px; line-height: 1.6;">
+                    <div style="font-size: 64px; margin-bottom: 20px;">🌟</div>
+                    Válassz sémát és indítsd el a generálást!<br>
+                    <small style="font-size: 18px; opacity: 0.8;">Professzionális Wordle-algoritmussal</small>
+                </div>
+            </div>
+        </div>
+
+        <canvas id="debugCanvas" class="canvas-debug" width="1200" height="700"></canvas>
+    </div>
+
+    <script>
+        // Előre definiált szókészletek minden sémához
+        const presets = {
+            schema1: "students,learning,education,technology,experience,textbook,information,school,reading,knowledge,understanding,comprehension,process,successful,everything,comes,well,argued,iPad,another,preferred,excess,entitlement,thinking,gift,work,encyclopedia,research,world,issue,handed,go,style,today,never,some,textbook,else,student,master,because,through,always,seem,possible,development,creative,innovative,digital,interactive,engagement,motivation,curiosity,exploration,discovery",
+            
+            schema2: "Teachers,Students,understand,writing,activities,classmates,choices,learning,books,reading,opportunities,practice,provide,participate,assessment,classroom,guidelines,responsible,exploring,meaningful,encourage,behavior,thinking,literacy,schedule,conversations,nurture,assessed,complete,graded,authentic,carefully,monitor,listen,observe,genuine,writers,expect,taking,independently,respond,write,share,explain,using,right,self,relative,characteristics,organize,assume,sharing,collaboration,engagement,instruction,pedagogy,curriculum,methodology",
+            
+            schema3: "Common Core,Education,Standards,Teachers,Students,Mathematics,English,Reading,Writing,Grade,Achievement,Curriculum,Proficiency,Academic,Consistent,Educators,Critics,Lawmakers,Rigorous,Language,School,Public,High School,Middle School,Tests,Measure,Math,Schooling,Legislature,Governors,Political,Shares,Debate,Feedback,Repeat,Implementation,Assessment,Framework,Guidelines,Objectives,Competency,Benchmark,Performance,Quality,Excellence",
+            
+            schema4: "COMMON,CORE,GRADE,STUDENTS,STATE,MATHEMATICS,EDUCATION,ASSESSMENT,SCHOOL,CONTENT,MATHEMATICAL,TEACHERS,ENGLISH,LANGUAGE,READING,WRITING,NATIONAL,EXAMPLE,DISTRICTS,ASSESSMENTS,INSTRUCTING,CAROLINA,ACROSS,USE,WORK,FOUR,NEW,COLLEGE,FRACTIONS,PROBLEMS,DOMAIN,ADOPTION,PRACTICE,SOLVE,EQUATIONS,INITIATIVE,SYSTEM,TWO,TAUGHT,WITHIN,INITIATIVE,STANDARDS,IMPLEMENTATION,FRAMEWORK,POLICY,CURRICULUM,ACADEMIC,ACHIEVEMENT,PERFORMANCE,QUALITY,EXCELLENCE",
+            
+            schema5: "e-learning,education city,formative,government,highlights,free,home,human,general,comment,responsibility,resources,families,primary,secondary,individual,experience,fundamental,encyclopedia,development,early,guardian,rent,book,offer,department,says,digital,technology,innovation,creativity,collaboration,communication,critical thinking,problem solving,research,analysis,synthesis,evaluation,reflection,growth,progress,achievement,success,excellence,quality,standards,assessment,feedback,improvement,enhancement,transformation"
+        };
+
+        let currentSchema = 'schema1';
+        let currentWords = [];
+        let canvas, ctx;
+        let isGenerating = false;
+
+        // Séma kiválasztás kezelése
+        document.getElementById('schemaSelector').addEventListener('click', function(e) {
+            const card = e.target.closest('.schema-card');
+            if (card) {
+                // Előző aktív eltávolítása
+                document.querySelectorAll('.schema-card').forEach(c => c.classList.remove('active'));
+                
+                // Új aktív beállítása
+                card.classList.add('active');
+                currentSchema = card.dataset.schema;
+                
+                // Konténer frissítése
+                const container = document.getElementById('wordcloud-container');
+                container.className = `wordcloud-container ${currentSchema}`;
+                
+                // Ha van szöveg, újragenerálás
+                const wordsInput = document.getElementById('words').value;
+                if (wordsInput.trim()) {
+                    generateWordCloud();
+                }
+            }
+        });
+
+        // Slider frissítés
+        document.getElementById('maxWords').addEventListener('input', function() {
+            document.getElementById('maxWordsValue').textContent = this.value;
+        });
+
+        // Canvas inicializálás
+        function initCanvas() {
+            canvas = document.getElementById('debugCanvas');
+            ctx = canvas.getContext('2d');
+            const container = document.getElementById('wordcloud');
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+        }
+
+        // Logaritmikus méretszámítás
+        function calculateFontSize(frequency, maxFreq, minFreq, rank, totalWords) {
+            const minSize = 16;
+            const maxSize = 75;
+            
+            if (maxFreq === minFreq) return maxSize;
+            
+            // Kombinált logika: gyakoriság + rang
+            const freqWeight = 0.7;
+            const rankWeight = 0.3;
+            
+            // Logaritmikus skálázás a gyakorisághoz
+            const logFreq = Math.log(frequency + 1);
+            const logMax = Math.log(maxFreq + 1);
+            const logMin = Math.log(minFreq + 1);
+            const freqRatio = (logFreq - logMin) / (logMax - logMin);
+            
+            // Rang alapú skálázás (inverz)
+            const rankRatio = Math.max(0, 1 - (rank / totalWords));
+            
+            // Kombinált arány
+            const combinedRatio = freqWeight * freqRatio + rankWeight * rankRatio;
+            
+            return Math.round(minSize + (maxSize - minSize) * combinedRatio);
+        }
+
+        // Méret kategória meghatározása
+        function getSizeCategory(fontSize) {
+            if (fontSize >= 60) return 'size-xl';
+            if (fontSize >= 45) return 'size-l';
+            if (fontSize >= 32) return 'size-m';
+            if (fontSize >= 24) return 'size-s';
+            return 'size-xs';
+        }
+
+        // Forgatási szög generálása
+        function getRotationAngle() {
+            const rotations = [-30, -15, 0, 15, 30];
+            const weights = [0.1, 0.2, 0.4, 0.2, 0.1]; // 0° a leggyakoribb
+            
+            let random = Math.random();
+            for (let i = 0; i < weights.length; i++) {
+                if (random < weights[i]) {
+                    return rotations[i];
+                }
+                random -= weights[i];
+            }
+            return 0;
+        }
+
+        // Archimédeszi spirál
+        function archimedeanSpiral(size) {
+            const e = size[0] / size[1];
+            return function(t) {
+                return [e * (t *= 0.1) * Math.cos(t), t * Math.sin(t)];
+            };
+        }
+
+        // Négyszögletes spirál
+        function rectangularSpiral(size) {
+            const dx = 6;
+            const dy = 6;
+            let x = 0, y = 0;
+            
+            return function(t) {
+                const sign = t < 0 ? -1 : 1;
+                const step = Math.floor(Math.sqrt(1 + 4 * sign * t) - sign) & 3;
+                
+                switch (step) {
+                    case 0: x += dx; break;
+                    case 1: y += dy; break;
+                    case 2: x -= dx; break;
+                    default: y -= dy; break;
+                }
+                return [size[0] / 2 + x, size[1] / 2 + y];
+            };
+        }
+
+        // Canvas-alapú szöveg méret számítás
+        function getTextBounds(text, fontSize, fontFamily, rotation = 0) {
+            ctx.font = `bold ${fontSize}px ${fontFamily}`;
+            const metrics = ctx.measureText(text);
+            
+            const width = metrics.width;
+            const height = fontSize * 1.2; // Line height
+            
+            // Forgatás figyelembevétele
+            if (rotation !== 0) {
+                const rad = (rotation * Math.PI) / 180;
+                const cos = Math.abs(Math.cos(rad));
+                const sin = Math.abs(Math.sin(rad));
+                return {
+                    width: width * cos + height * sin + 10, // Extra padding
+                    height: width * sin + height * cos + 10
+                };
+            }
+            
+            return { width: width + 6, height: height + 4 }; // Padding
+        }
+
+        // Ütközés ellenőrzése
+        function checkCollision(word, placedWords) {
+            const padding = 12;
+            const wordBounds = {
+                left: word.x - word.width / 2,
+                top: word.y - word.height / 2,
+                right: word.x + word.width / 2,
+                bottom: word.y + word.height / 2
+            };
+
+            // Konténer határok ellenőrzése
+            const container = document.getElementById('wordcloud');
+            if (wordBounds.left < padding || 
+                wordBounds.top < padding || 
+                wordBounds.right > container.offsetWidth - padding || 
+                wordBounds.bottom > container.offsetHeight - padding) {
+                return true;
+            }
+
+            // Más szavakkal való ütközés
+            for (let placedWord of placedWords) {
+                const placedBounds = {
+                    left: placedWord.x - placedWord.width / 2,
+                    top: placedWord.y - placedWord.height / 2,
+                    right: placedWord.x + placedWord.width / 2,
+                    bottom: placedWord.y + placedWord.height / 2
+                };
+
+                if (wordBounds.left < placedBounds.right + padding &&
+                    wordBounds.right > placedBounds.left - padding &&
+                    wordBounds.top < placedBounds.bottom + padding &&
+                    wordBounds.bottom > placedBounds.top - padding) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Szó elhelyezése spirálon
+        function placeWord(word, spiral, container, placedWords) {
+            const centerX = container.offsetWidth / 2;
+            const centerY = container.offsetHeight / 2;
+            
+            // Kezdő pozíció középpontban
+            word.x = centerX;
+            word.y = centerY;
+
+            if (!checkCollision(word, placedWords)) {
+                return true;
+            }
+
+            // Spirál mentén keresés
+            const maxSteps = 3000;
+            for (let t = 0; t < maxSteps; t++) {
+                const pos = spiral(t);
+                word.x = centerX + pos[0];
+                word.y = centerY + pos[1];
+
+                if (!checkCollision(word, placedWords)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Főfunkció: Szófelhő generálás
+        async function generateWordCloud() {
+            if (isGenerating) return;
+            
+            isGenerating = true;
+            const spiralType = document.getElementById('spiral').value;
+            const maxWords = parseInt(document.getElementById('maxWords').value);
+            const wordsInput = document.getElementById('words').value;
+            const container = document.getElementById('wordcloud-container');
+            const wordcloud = document.getElementById('wordcloud');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const status = document.getElementById('status');
+
+            // UI beállítások
+            container.className = `wordcloud-container ${currentSchema}`;
+            progressContainer.style.display = 'block';
+            status.textContent = '🔄 Szavak elemzése...';
+
+            if (!wordsInput.trim()) {
+                wordcloud.innerHTML = `<div style="text-align: center; color: rgba(0,0,0,0.6); font-size: 24px; padding: 80px 40px;">
+                    <div style="font-size: 48px; margin-bottom: 20px;">📝</div>
+                    Kérlek add meg a szavakat!<br>
+                    <small style="font-size: 16px; opacity: 0.7;">Vesszővel elválasztva</small>
+                </div>`;
+                progressContainer.style.display = 'none';
+                isGenerating = false;
+                return;
+            }
+
+            // Canvas inicializálás
+            initCanvas();
+
+            // Szavak feldolgozása - space nélküli vesszőket is támogatja
+            const words = wordsInput.split(/[,，]/) // Támogatja a normál és kínai vesszőt is
+                .map(word => word.trim())
+                .filter(word => word.length > 0);
+            
+            const wordFreq = {};
+
+            words.forEach(word => {
+                // Tisztított szó (kisbetűs, speciális karakterek nélkül)
+                const cleanWord = word.toLowerCase().replace(/[^\w\s\u00C0-\u017F\u0100-\u017F]/g, '');
+                if (cleanWord && cleanWord.length > 1) { // Min 2 karakter
+                    wordFreq[cleanWord] = (wordFreq[cleanWord] || 0) + 1;
+                }
+            });
+
+            // Szavak rendezése és limit
+            const sortedWords = Object.entries(wordFreq)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, maxWords)
+                .map(([word, freq], index) => ({ word, freq, rank: index }));
+
+            if (sortedWords.length === 0) {
+                wordcloud.innerHTML = `<div style="text-align: center; color: rgba(0,0,0,0.6); font-size: 20px; padding: 60px 40px;">
+                    <div style="font-size: 48px; margin-bottom: 20px;">❌</div>
+                    Nem találtam érvényes szavakat!<br>
+                    <small style="font-size: 14px; opacity: 0.7;">Próbálj legalább 2 karakteres szavakat</small>
+                </div>`;
+                progressContainer.style.display = 'none';
+                isGenerating = false;
+                return;
+            }
+
+            const maxFreq = sortedWords[0].freq;
+            const minFreq = sortedWords[sortedWords.length - 1].freq;
+
+            // Spirál generátor
+            const spiralSize = [canvas.width, canvas.height];
+            const spiral = spiralType === 'archimedean' ? 
+                archimedeanSpiral(spiralSize) : rectangularSpiral(spiralSize);
+
+            // Szófelhő tisztítása
+            wordcloud.innerHTML = '';
+            const placedWords = [];
+
+            status.textContent = '🎨 Szavak elhelyezése...';
+
+            // Font családok meghatározása sémánként
+            const fontFamilies = {
+                schema1: 'Comic Sans MS, Apple Chancery, cursive',
+                schema2: 'Arial Black, Helvetica Neue, Arial, sans-serif',
+                schema3: 'Times New Roman, Georgia, serif',
+                schema4: 'Arial, Helvetica, sans-serif',
+                schema5: 'Verdana, Trebuchet MS, sans-serif'
+            };
+
+            // Szavak elhelyezése
+            let successCount = 0;
+            for (let i = 0; i < sortedWords.length; i++) {
+                const wordObj = sortedWords[i];
+                const fontSize = calculateFontSize(wordObj.freq, maxFreq, minFreq, i, sortedWords.length);
+                const rotation = getRotationAngle();
+                const fontFamily = fontFamilies[currentSchema];
+
+                // Szó objektum létrehozása
+                const bounds = getTextBounds(wordObj.word, fontSize, fontFamily.split(',')[0], rotation);
+                const word = {
+                    text: wordObj.word,
+                    fontSize: fontSize,
+                    fontFamily: fontFamily,
+                    rotation: rotation,
+                    width: bounds.width,
+                    height: bounds.height,
+                    freq: wordObj.freq,
+                    rank: i
+                };
+
+                // Szó elhelyezése
+                if (placeWord(word, spiral, wordcloud, placedWords)) {
+                    placedWords.push(word);
+                    successCount++;
+                    
+                    // DOM elem létrehozása - garantáltan a konténeren belül
+                    const wordElement = document.createElement('div');
+                    wordElement.className = `word ${getSizeCategory(fontSize)}`;
+                    wordElement.textContent = word.text;
+                    wordElement.style.fontSize = word.fontSize + 'px';
+                    wordElement.style.fontFamily = word.fontFamily;
+                    
+                    // Biztonságos pozicionálás
+                    const leftPos = Math.max(0, Math.min(word.x - word.width / 2, wordcloud.offsetWidth - word.width));
+                    const topPos = Math.max(0, Math.min(word.y - word.height / 2, wordcloud.offsetHeight - word.height));
+                    
+                    wordElement.style.left = leftPos + 'px';
+                    wordElement.style.top = topPos + 'px';
+                    wordElement.style.position = 'absolute';
+                    wordElement.style.whiteSpace = 'nowrap';
+                    wordElement.style.overflow = 'hidden';
+                    wordElement.style.maxWidth = (wordcloud.offsetWidth - leftPos - 10) + 'px';
+                    
+                    if (word.rotation !== 0) {
+                        wordElement.style.transform = `rotate(${word.rotation}deg)`;
+                        wordElement.style.transformOrigin = 'center center';
+                    }
+
+                    // Tooltip hozzáadása
+                    wordElement.title = `"${word.text}" - ${word.freq}× előfordulás`;
+
+                    wordcloud.appendChild(wordElement);
+                }
+
+                // Progress frissítése
+                const progress = ((i + 1) / sortedWords.length) * 100;
+                progressFill.style.width = progress + '%';
+                status.textContent = `🎨 Elhelyezés: ${successCount}/${i + 1} szó`;
+                
+                // Aszinkron feldolgozás - UI responsive marad
+                if (i % 8 === 0) {
+                    await new Promise(resolve => setTimeout(resolve, 5));
+                }
+            }
+
+            // Befejezés
+            const successRate = Math.round((successCount / sortedWords.length) * 100);
+            status.textContent = `✅ Kész! ${successCount}/${sortedWords.length} szó (${successRate}%) sikeresen elhelyezve`;
+            
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+            }, 3000);
+
+            currentWords = sortedWords;
+            isGenerating = false;
+        }
+
+        // Preset betöltése
+        function loadPreset() {
+            const preset = presets[currentSchema];
+            if (preset) {
+                document.getElementById('words').value = preset;
+                generateWordCloud();
+            }
+        }
+
+        // Újragenerálás
+        function regenerate() {
+            if (document.getElementById('words').value.trim() || currentWords.length > 0) {
+                generateWordCloud();
+            } else {
+                loadPreset();
+            }
+        }
+
+        // Automatikus újragenerálás spirál változtatáskor
+        document.getElementById('spiral').addEventListener('change', function() {
+            const wordsInput = document.getElementById('words').value;
+            if (wordsInput.trim()) {
+                generateWordCloud();
+            }
+        });
+
+        // Kezdeti betöltés
+        window.addEventListener('load', function() {
+            // Rövid delay a CSS betöltés után
+            setTimeout(() => {
+                loadPreset();
+            }, 100);
+        });
+
+        // Responsive újraméretezés
+        window.addEventListener('resize', function() {
+            clearTimeout(window.resizeTimeout);
+            window.resizeTimeout = setTimeout(() => {
+                if (currentWords.length > 0) {
+                    generateWordCloud();
+                }
+            }, 500);
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'Enter':
+                        e.preventDefault();
+                        generateWordCloud();
+                        break;
+                    case 'r':
+                        e.preventDefault();
+                        regenerate();
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+            

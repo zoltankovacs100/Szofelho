@@ -49,7 +49,7 @@ const AdminDashboard = () => {
         topic: newTopic,
         createdAt: { seconds: Math.floor(Date.now() / 1000) },
         status: 'active',
-        styleId: 'style-1' // Alapértelmezett stílus
+        styleId: 'schema1' // Alapértelmezett stílus - Zöld Természetes
       });
       setNewTopic('');
     } catch (e) {
@@ -137,26 +137,61 @@ const AdminDashboard = () => {
           {sessions.length > 0 ? (
             <div className="sessions-grid">
               {sessions.map(session => (
-                <div key={session.id} className="session-card">
+                <div key={session.id} className="session-card" style={{
+                  background: 'white',
+                  borderRadius: '15px',
+                  padding: '25px',
+                  marginBottom: '20px',
+                  boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
+                  border: '1px solid #f0f0f0'
+                }}>
                   <div className="session-header">
                     <div className="session-info">
-                      <h3 className="session-topic">{session.topic}</h3>
-                                             <div className="session-meta">
-                                                   <button 
-                            onClick={() => window.open(`/session/${session.id}`, '_blank')}
-                            className="session-pin-btn"
-                          >
-                            {window.location.hostname}/{session.pin}
-                          </button>
-                         <span className="session-date">
-                           {new Date(session.createdAt.seconds * 1000).toLocaleDateString('hu-HU')}
-                         </span>
-                       </div>
+                      <h3 className="session-topic" style={{
+                        color: '#2c3e50',
+                        fontSize: '1.4em',
+                        marginBottom: '12px',
+                        fontWeight: '700'
+                      }}>{session.topic}</h3>
+                      <div className="session-meta" style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '15px' }}>
+                        <button 
+                          onClick={() => window.open(`/session/${session.id}`, '_blank')}
+                          className="session-pin-btn"
+                          style={{
+                            background: 'linear-gradient(135deg, #2d5016 0%, #1B4332 100%)',
+                            color: 'white',
+                            border: 'none',
+                            padding: '8px 16px',
+                            borderRadius: '8px',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            boxShadow: '0 4px 12px rgba(45, 80, 22, 0.3)'
+                          }}
+                        >
+                          📍 {window.location.hostname}/{session.pin}
+                        </button>
+                        <span className="session-date" style={{
+                          color: '#666',
+                          fontSize: '14px',
+                          fontWeight: '500'
+                        }}>
+                          📅 {new Date(session.createdAt.seconds * 1000).toLocaleDateString('hu-HU')}
+                        </span>
+                      </div>
                     </div>
-                    <div className="session-actions">
+                    <div className="session-actions" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                       <button 
                         onClick={() => copyDirectLink(session.id)} 
                         className="btn btn-secondary btn-sm"
+                        style={{
+                          background: copiedSessionId === session.id ? '#28a745' : '#6c757d',
+                          color: 'white',
+                          border: 'none',
+                          padding: '6px 12px',
+                          borderRadius: '6px',
+                          fontSize: '12px',
+                          cursor: 'pointer'
+                        }}
                       >
                         {copiedSessionId === session.id ? '✓ Másolva!' : '🔗 Link másolása'}
                       </button>
@@ -164,6 +199,15 @@ const AdminDashboard = () => {
                       <button 
                         onClick={() => deleteSession(session.id)} 
                         className="btn btn-danger btn-sm"
+                        style={{
+                          background: '#dc3545',
+                          color: 'white',
+                          border: 'none',
+                          padding: '6px 12px',
+                          borderRadius: '6px',
+                          fontSize: '12px',
+                          cursor: 'pointer'
+                        }}
                       >
                         🗑️ Törlés
                       </button>
@@ -173,7 +217,9 @@ const AdminDashboard = () => {
                   <div className="session-settings">
                     <div className="settings-row">
                       <StylePicker sessionId={session.id} currentStyleId={session.styleId} />
-                      <FontPicker sessionId={session.id} currentFont={session.fontFamily || 'Montserrat'} />
+                    </div>
+                    <div style={{ marginTop: '15px', fontSize: '13px', color: '#666', fontStyle: 'italic' }}>
+                      💡 Válassz sémát a szófelhő megjelenéséhez. A résztvevők ezt a stílust fogják látni.
                     </div>
                   </div>
                 </div>

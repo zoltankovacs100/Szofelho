@@ -1,6 +1,95 @@
 // src/styles.js
 
 export const stylePresets = {
+  // ÚJ SÉMÁK - A HTML WORDCLOUD GENERÁTORBÓL
+  'schema1': {
+    id: 'schema1',
+    name: 'Zöld Természetes',
+    description: 'Barátságos, organikus megjelenés Comic Sans betűtípussal és természetes zöld árnyalatokkal',
+    background: 'linear-gradient(135deg, #8FBC8F 0%, #9ACD32 50%, #90EE90 100%)',
+    fontFamily: 'Comic Sans MS, Apple Chancery, cursive',
+    wordColors: ['#1B4332', '#2D5016', '#52B788', '#74C69D', '#95D5B2'],
+    textColor: '#1B4332',
+    cardColor: 'rgba(255, 255, 255, 0.8)',
+    useNewWordCloud: true,
+    baseFontPx: 18,
+    maxFontPx: 110,
+    padding: 3,
+    spiralStep: 3,
+    iterationsPerWord: 3000,
+    hoverTooltip: true
+  },
+  'schema2': {
+    id: 'schema2', 
+    name: 'Sötét Modern',
+    description: 'Elegáns sötét háttér Arial Black betűtípussal és vibráló színekkel',
+    background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #404040 100%)',
+    fontFamily: 'Arial Black, Helvetica Neue, Arial, sans-serif',
+    wordColors: ['#FF4500', '#FF6B35', '#32CD32', '#87CEEB', '#DDA0DD'],
+    textColor: '#FFFFFF',
+    cardColor: 'rgba(255, 255, 255, 0.1)',
+    useNewWordCloud: true,
+    baseFontPx: 20,
+    maxFontPx: 115,
+    padding: 3,
+    spiralStep: 3,
+    iterationsPerWord: 3000,
+    hoverTooltip: true
+  },
+  'schema3': {
+    id: 'schema3',
+    name: 'Világos Elegáns',
+    description: 'Tiszta, professzionális megjelenés Times New Roman betűtípussal',
+    background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%)',
+    fontFamily: 'Times New Roman, Georgia, serif',
+    wordColors: ['#1B4332', '#2F5233', '#40916C', '#52B788', '#74C69D'],
+    textColor: '#2F5233',
+    cardColor: 'rgba(255, 255, 255, 0.9)',
+    useNewWordCloud: true,
+    baseFontPx: 19,
+    maxFontPx: 108,
+    padding: 3,
+    spiralStep: 3,
+    iterationsPerWord: 3000,
+    hoverTooltip: true
+  },
+  'schema4': {
+    id: 'schema4',
+    name: 'Professzionális',
+    description: 'Üzleti stílus Arial betűtípussal és egyszerű színpalettal',
+    background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%)',
+    fontFamily: 'Arial, Helvetica, sans-serif',
+    wordColors: ['#1B4332', '#2F5233', '#E76F51', '#F4A261', '#E9C46A'],
+    textColor: '#1B4332',
+    cardColor: 'rgba(255, 255, 255, 0.7)',
+    useNewWordCloud: true,
+    baseFontPx: 18,
+    maxFontPx: 105,
+    padding: 2.5,
+    spiralStep: 2.8,
+    iterationsPerWord: 2800,
+    hoverTooltip: true
+  },
+  'schema5': {
+    id: 'schema5',
+    name: 'Színes Oktatási',
+    description: 'Élénk, inspiráló színek Verdana betűtípussal az oktatási környezethez',
+    background: 'linear-gradient(135deg, #ffffff 0%, #f0f8ff 50%, #e6f3ff 100%)',
+    fontFamily: 'Verdana, Trebuchet MS, sans-serif',
+    wordColors: ['#D73527', '#E74C3C', '#F39C12', '#27AE60', '#3498DB'],
+    textColor: '#2c3e50',
+    cardColor: 'rgba(255, 255, 255, 0.8)',
+    useNewWordCloud: true,
+    baseFontPx: 18,
+    maxFontPx: 112,
+    padding: 3,
+    spiralStep: 3,
+    iterationsPerWord: 3000,
+    hoverTooltip: true
+  },
+
+  // KORÁBBI STÍLUSOK - KIKOMMENTEZVE, DE MEGŐRIZVE
+  /*
   'style-1': {
     id: 'style-1',
     name: 'Poppins Bold',
@@ -239,4 +328,5 @@ export const stylePresets = {
     iterationsPerWord: 3100,
     hoverTooltip: true
   }
+  */
 };

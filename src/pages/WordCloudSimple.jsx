@@ -4,45 +4,30 @@ import { db, auth } from '../localDb';
 import { onAuthStateChanged, collection, addDoc, onSnapshot, query, serverTimestamp, doc, getDocs } from '../localDb';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
-import { stylePresets } from '../styles';
-import QRCodeDisplay from '../components/QRCodeDisplay';
+import QRCodeGenerator from '../components/QRCodeGenerator';
 
-// Teljes sémák az új styles.js-ből
+// Egyszerű sémák
 const schemas = {
   schema1: {
     name: 'Zöld Természetes',
-    description: 'Barátságos, organikus megjelenés Comic Sans betűtípussal és természetes zöld árnyalatokkal',
-    background: 'linear-gradient(135deg, #8FBC8F 0%, #9ACD32 50%, #90EE90 100%)',
-    fontFamily: 'Comic Sans MS, Apple Chancery, cursive',
+    description: 'Barátságos zöld színek',
+    background: 'linear-gradient(135deg, #8FBC8F 0%, #9ACD32 100%)',
+    fontFamily: 'Comic Sans MS, cursive',
     colors: ['#1B4332', '#2D5016', '#52B788', '#74C69D', '#95D5B2']
   },
   schema2: {
     name: 'Sötét Modern', 
-    description: 'Elegáns sötét háttér Arial Black betűtípussal és vibráló színekkel',
-    background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #404040 100%)',
-    fontFamily: 'Arial Black, Helvetica Neue, Arial, sans-serif',
+    description: 'Elegáns sötét stílus',
+    background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+    fontFamily: 'Arial Black, sans-serif',
     colors: ['#FF4500', '#FF6B35', '#32CD32', '#87CEEB', '#DDA0DD']
   },
   schema3: {
     name: 'Világos Elegáns',
-    description: 'Tiszta, professzionális megjelenés Times New Roman betűtípussal',
-    background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%)',
-    fontFamily: 'Times New Roman, Georgia, serif',
+    description: 'Tiszta professzionális megjelenés',
+    background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
+    fontFamily: 'Times New Roman, serif',
     colors: ['#1B4332', '#2F5233', '#40916C', '#52B788', '#74C69D']
-  },
-  schema4: {
-    name: 'Professzionális',
-    description: 'Üzleti stílus Arial betűtípussal és egyszerű színpalettal',
-    background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%)',
-    fontFamily: 'Arial, Helvetica, sans-serif',
-    colors: ['#1B4332', '#2F5233', '#E76F51', '#F4A261', '#E9C46A']
-  },
-  schema5: {
-    name: 'Színes Oktatási',
-    description: 'Élénk, inspiráló színek Verdana betűtípussal az oktatási környezethez',
-    background: 'linear-gradient(135deg, #ffffff 0%, #f0f8ff 50%, #e6f3ff 100%)',
-    fontFamily: 'Verdana, Trebuchet MS, sans-serif',
-    colors: ['#D73527', '#E74C3C', '#F39C12', '#27AE60', '#3498DB']
   }
 };
 
@@ -53,19 +38,11 @@ const WordCloud = () => {
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
+  const [currentSchema, setCurrentSchema] = useState('schema1');
   const [isGenerating, setIsGenerating] = useState(false);
-  const [showQRCode, setShowQRCode] = useState(false);
   const cloudContainerRef = useRef(null);
 
-  // Csak az admin által beállított stílust használja
-  const activeSchema = sessionData?.styleId && stylePresets[sessionData.styleId] ? 
-    {
-      ...schemas[sessionData.styleId] || schemas['schema1'],
-      background: stylePresets[sessionData.styleId].background,
-      fontFamily: stylePresets[sessionData.styleId].fontFamily,
-      colors: stylePresets[sessionData.styleId].wordColors
-    } : 
-    schemas['schema1']; // Alapértelmezett séma ha nincs admin beállítás
+  const activeSchema = schemas[currentSchema];
 
   // Check if user is admin
   useEffect(() => {
@@ -74,13 +51,6 @@ const WordCloud = () => {
     });
     return () => unsubscribe();
   }, []);
-
-  // Check if QR code should be shown
-  useEffect(() => {
-    if (!sessionId) return;
-    const shouldShowQR = localStorage.getItem(`qr_show_${sessionId}`);
-    setShowQRCode(shouldShowQR === 'true');
-  }, [sessionId]);
 
   // Fetch session data
   useEffect(() => {
@@ -140,7 +110,7 @@ const WordCloud = () => {
     if (words.length > 0 && cloudContainerRef.current) {
       generateSimpleWordCloud();
     }
-  }, [words, activeSchema]);
+  }, [words, currentSchema]);
 
   const generateSimpleWordCloud = () => {
     const container = cloudContainerRef.current;
@@ -248,7 +218,7 @@ const WordCloud = () => {
   return (
     <div style={{ 
       fontFamily: 'Segoe UI, sans-serif',
-      background: 'linear-gradient(135deg, #2d5016 0%, #1B4332 100%)',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       minHeight: '100vh',
       padding: '20px'
     }}>
@@ -276,31 +246,77 @@ const WordCloud = () => {
           
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px', flexWrap: 'wrap', marginBottom: '20px' }}>
             <span style={{ 
-              background: 'linear-gradient(135deg, #2d5016 0%, #1B4332 100%)',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               color: 'white',
               fontSize: '1.1rem', 
               fontWeight: '600',
               padding: '10px 18px',
               borderRadius: '10px',
-              boxShadow: '0 6px 15px rgba(45, 80, 22, 0.3)'
+              boxShadow: '0 6px 15px rgba(102, 126, 234, 0.3)'
             }}>
               📍 {window.location.hostname}/{sessionData?.pin || '______'}
             </span>
+            
+            {sessionId && (
+              <QRCodeGenerator sessionUrl={window.location.href} />
+            )}
           </div>
         </div>
 
+        {/* Schema selector */}
+        <div style={{ marginBottom: '25px' }}>
+          <h3 style={{ marginBottom: '15px', color: '#2c3e50', textAlign: 'center' }}>
+            🎨 Válassz stílust:
+          </h3>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '15px',
+            flexWrap: 'wrap'
+          }}>
+            {Object.entries(schemas).map(([key, schema]) => (
+              <div
+                key={key}
+                onClick={() => setCurrentSchema(key)}
+                style={{
+                  background: '#fff',
+                  borderRadius: '10px',
+                  padding: '15px',
+                  border: currentSchema === key ? '3px solid #667eea' : '3px solid #ddd',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: currentSchema === key ? '0 8px 20px rgba(102, 126, 234, 0.3)' : '0 4px 12px rgba(0,0,0,0.1)',
+                  transform: currentSchema === key ? 'translateY(-2px)' : 'none',
+                  minWidth: '150px',
+                  textAlign: 'center'
+                }}
+              >
+                <div style={{
+                  height: '60px',
+                  borderRadius: '8px',
+                  marginBottom: '10px',
+                  background: schema.background,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  fontSize: '12px',
+                  textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+                }}>
+                  {schema.name}
+                </div>
+                <div style={{ fontWeight: 'bold', color: '#2c3e50', fontSize: '13px' }}>
+                  {schema.name}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Word input */}
         <div style={{ marginBottom: '25px', textAlign: 'center' }}>
-          <form onSubmit={handleWordSubmit} style={{ 
-            display: 'flex', 
-            flexDirection: window.innerWidth < 768 ? 'column' : 'row',
-            gap: '10px', 
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%',
-            maxWidth: '400px'
-          }}>
+          <form onSubmit={handleWordSubmit} style={{ display: 'inline-flex', gap: '10px', alignItems: 'center' }}>
             <input
               type="text"
               value={inputValue}
@@ -311,24 +327,21 @@ const WordCloud = () => {
                 border: '2px solid #ddd', 
                 borderRadius: '8px', 
                 fontSize: '16px',
-                width: '100%',
-                maxWidth: '280px',
-                minWidth: '200px'
+                minWidth: '250px'
               }}
             />
             <button 
               type="submit"
               style={{
-                background: 'linear-gradient(135deg, #2d5016 0%, #1B4332 100%)',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                 color: 'white',
                 border: 'none',
-                padding: window.innerWidth < 768 ? '14px 24px' : '12px 20px',
+                padding: '12px 20px',
                 fontSize: '16px',
                 fontWeight: '600',
                 borderRadius: '8px',
                 cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(45, 80, 22, 0.3)',
-                width: window.innerWidth < 768 ? '100%' : 'auto'
+                boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)'
               }}
             >
               Beküldés
@@ -388,16 +401,11 @@ const WordCloud = () => {
           </div>
         )}
 
-        {/* Status - csak szószám */}
+        {/* Status */}
         {words.length > 0 && (
           <div style={{ textAlign: 'center', marginTop: '20px', color: '#666', fontSize: '14px' }}>
-            📈 {words.length} különböző szó gyűjtve
+            📈 {words.length} különböző szó • 🎨 {activeSchema.name} séma
           </div>
-        )}
-
-        {/* QR Code Display - draggolható felugró ablak */}
-        {showQRCode && (
-          <QRCodeDisplay sessionUrl={window.location.href} />
         )}
       </div>
     </div>
